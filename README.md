@@ -1,6 +1,6 @@
 # WebCrawler
 
-This php class allows you to crawl recursively a given webpage and collect some data from it. The final representation will be the json format for further processing.
+This php class allows you to crawl recursively a given webpage (or a given html file) and collect some data from it. Simply define the url (or a html file) and a set of xpath expressions which should map with the output data object. The final representation will be the json format for further processing.
 
 ## How to use
 
@@ -150,7 +150,7 @@ use Ixno\WebCrawler\XpathSet;
 use Ixno\WebCrawler\Data;
 use Ixno\WebCrawler\Url;
 
-$url = 'https://www.domain.tld/page.html';
+$url = 'https://www.page.tld/page.html';
 
 $crawler = new Crawler(
     new Url($url),
@@ -161,7 +161,7 @@ $crawler = new Crawler(
                 array(
                     'link' => array(
                         'query'  => 'p[1]/a[1][span[contains(text(), \'Mehr\')]]/@href',
-                        'prefix' => 'https://presse.adac.de',
+                        'prefix' => 'https://www.page.tld',
                     ),
                 )
             )
@@ -198,7 +198,7 @@ It returns:
 ```
 [
     {
-        "link": "https://www.domain.tld/folder/subpage.html",
+        "link": "https://www.page.tld/folder/subpage.html",
         "title": "Kraftstoffpreise geben leicht nach",
         "subtitle": "Preis für Brent-Öl bei 65 Dollar",
         "category": "Verkehr",
