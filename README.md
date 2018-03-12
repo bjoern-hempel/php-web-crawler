@@ -14,7 +14,7 @@ require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
 use Ixno\WebCrawler\Crawler;
 use Ixno\WebCrawler\Page;
 use Ixno\WebCrawler\XpathSet;
-use Ixno\WebCrawler\Url;
+use Ixno\WebCrawler\Source\Url;
 
 $url = 'https://www.page.tld';
 
@@ -63,7 +63,7 @@ require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
 use Ixno\WebCrawler\Crawler;
 use Ixno\WebCrawler\Page;
 use Ixno\WebCrawler\XpathSet;
-use Ixno\WebCrawler\Url;
+use Ixno\WebCrawler\Source\Url;
 
 $url = 'https://www.page.tld';
 
@@ -102,7 +102,7 @@ require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
 use Ixno\WebCrawler\Crawler;
 use Ixno\WebCrawler\Page;
 use Ixno\WebCrawler\XpathSet;
-use Ixno\WebCrawler\Html;
+use Ixno\WebCrawler\Source\Html;
 
 $html = file_get_contents('file.html');
 
@@ -147,8 +147,8 @@ use Ixno\WebCrawler\PageList;
 use Ixno\WebCrawler\Xpath;
 use Ixno\WebCrawler\XpathSet;
 
-use Ixno\WebCrawler\Data;
-use Ixno\WebCrawler\Url;
+use Ixno\WebCrawler\Source\Data;
+use Ixno\WebCrawler\Source\Url;
 
 $url = 'https://www.page.tld/page.html';
 
