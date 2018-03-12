@@ -379,7 +379,11 @@ class Crawler
         }
 
         $doc = new DOMDocument();
+
+        libxml_use_internal_errors(true);
         $doc->loadHTML($source);
+        libxml_clear_errors();
+
         $xpath = new DOMXpath($doc);
 
         return array_merge($data, $this->getData($xpath));
