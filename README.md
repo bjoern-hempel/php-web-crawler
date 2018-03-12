@@ -107,7 +107,7 @@ use Ixno\WebCrawler\Html;
 $html = file_get_contents('file.html');
 
 $crawler = new Crawler(
-    new Url($url),
+    new Html($url),
     new PageGroup(
         new Xpath('/html/body/section[1]/div/div[2]/div/div/article'),
         new Page(
