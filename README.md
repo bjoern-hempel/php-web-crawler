@@ -1,6 +1,6 @@
 # WebCrawler
 
-This php class allows you to crawl recursively a given webpage (or a given html file) and collect some data from it. Simply define the url (or html file) and a set of xpath expressions which should map with the output data object. The final representation will be the json format for further processing.
+This php class allows you to crawl recursively a given webpage (or a given html file) and collect some data from it. Simply define the url (or a html file) and a set of xpath expressions which should map with the output data object. The final representation will be the json format for further processing.
 
 ## How to use
 
