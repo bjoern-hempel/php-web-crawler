@@ -25,6 +25,11 @@
 
 namespace Ixno\WebCrawler;
 
+require_once 'Source/Source.php';
+require_once 'Source/Data.php';
+require_once 'Source/Html.php';
+require_once 'Source/Url.php';
+
 use ArrayIterator;
 use Exception;
 use DOMDocument;
@@ -32,57 +37,10 @@ use DOMElement;
 use DOMNodeList;
 use DOMXpath;
 
-
-interface Source {
-    public function __toString();
-}
-
-class Html implements Source
-{
-    private $html;
-
-    public function __construct($html)
-    {
-        $this->html = $html;
-    }
-
-    public function __toString()
-    {
-        return $this->html;
-    }
-}
-
-class Url implements Source
-{
-    private $url;
-
-    public function __construct($url)
-    {
-        $this->url = $url;
-    }
-
-    public function __toString()
-    {
-        return $this->url;
-    }
-}
-
-class Data implements Source
-{
-    private $data;
-
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
-    public function __toString()
-    {
-        return $this->data;
-    }
-}
-
-
+use Ixno\WebCrawler\Source\Source;
+use Ixno\WebCrawler\Source\Html;
+use Ixno\WebCrawler\Source\Url;
+use Ixno\WebCrawler\Source\Data;
 
 interface CrawlRule {
     public function getMapping();
