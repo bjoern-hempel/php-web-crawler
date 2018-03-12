@@ -7,6 +7,8 @@ This php class allows you to crawl recursively a given webpage and collect some 
 ### Basic usage (single webpage)
 
 ```
+<?php
+
 require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
 
 use Ixno\WebCrawler\Crawler;
@@ -54,6 +56,8 @@ It returns:
 ### Basic usage with xpath group (single webpage)
 
 ```
+<?php
+
 require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
 
 use Ixno\WebCrawler\Crawler;
@@ -91,6 +95,8 @@ It returns the same json format as the basic example given before.
 ### Basic usage with xpath group (from given html file)
 
 ```
+<?php
+
 require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
 
 use Ixno\WebCrawler\Crawler;
@@ -128,6 +134,8 @@ It returns the same json format as the basic example given before.
 ### More complex example (recursive crawling)
 
 ```
+<?php
+
 require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
 
 use Ixno\WebCrawler\Crawler;
