@@ -297,7 +297,7 @@ class Crawler
     protected function evalSource(Source $source, Array $data)
     {
         if ($source instanceof Data) {
-            if (array_key_exists($source, $data)) {
+            if (!array_key_exists((string)$source, $data)) {
                 throw new Exception(sprintf('Index "%s" was not found within the $data array.', $source));
             }
 
