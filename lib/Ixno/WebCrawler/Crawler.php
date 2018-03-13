@@ -25,13 +25,6 @@
 
 namespace Ixno\WebCrawler;
 
-require_once 'Source/Source.php';
-require_once 'Source/Data.php';
-require_once 'Source/Html.php';
-require_once 'Source/Url.php';
-require_once 'Converter/Converter.php';
-require_once 'Converter/DateParser.php';
-
 use ArrayIterator;
 use Exception;
 use DOMNode;
