@@ -34,6 +34,7 @@ require_once 'Converter/DateParser.php';
 
 use ArrayIterator;
 use Exception;
+use DOMNode;
 use DOMDocument;
 use DOMElement;
 use DOMNodeList;
@@ -193,6 +194,8 @@ class Crawler
             'prefix'    => null,
             'suffix'    => null,
             'converter' => null,
+            'content'   => 'text',
+            'output'    => 'auto',
         );
 
         if (is_string($config)) {
@@ -210,9 +213,34 @@ class Crawler
         return $config;
     }
 
-    protected function buildText($text, Array $config)
+    protected function clearHtml($html, Array $allowedTags = array('<br>', '<b>', '<i>', '<u>'))
+    {
+        $html = preg_replace('~<script(.*?)>(.*?)</script>~is', '', $html);
+        $html = strip_tags($html, implode('', $allowedTags));
+        $html = str_replace('</br>', '', $html);
+        $html = trim($html);
+
+        return $html;
+    }
+
+    protected function clearText($text)
     {
         $text = trim($text);
+
+        return $text;
+    }
+
+    protected function buildText(DOMNode $domNode, Array $config)
+    {
+        switch ($config['content']) {
+            case 'html':
+                $text = $this->clearHtml($domNode->C14N());
+                break;
+
+            default:
+                $text = $this->clearText($domNode->textContent);
+                break;
+        }
 
         if ($config['converter'] instanceof Converter) {
             $text = $config['converter']->getValue($text);
@@ -227,6 +255,24 @@ class Crawler
         }
 
         return $text;
+    }
+
+    protected function getFirstTextElement(DOMNodeList $domNodeList, Array $config)
+    {
+        foreach ($domNodeList as $domNode) {
+            return $this->buildText($domNode, $config);
+        }
+    }
+
+    protected function getAllTextElements(DOMNodeList $domNodeList, Array $config)
+    {
+        $data = array();
+
+        foreach ($domNodeList as $domNode) {
+            array_push($data, $this->buildText($domNode, $config));
+        }
+
+        return $data;
     }
 
     protected function curlHtml($url)
@@ -315,15 +361,25 @@ class Crawler
                 continue;
             }
 
-            if ($hit->length === 1) {
-                $data[$key] = $this->buildText($hit->item(0)->textContent, $config);
-                continue;
-            }
+            switch ($config['output']) {
+                /* simple */
+                case 'simple':
+                    $data[$key] = $this->getFirstTextElement($hit, $config);
+                    break;
 
-            $data[$key] = array();
+                /* multiple */
+                case 'multiple':
+                    $data[$key] = $this->getAllTextElements($hit, $config);
+                    break;
 
-            foreach ($hit as $entry) {
-                array_push($data[$key], $this->buildText($entry->textContent, $config));
+                /* auto */
+                default:
+                    if ($hit->length === 1) {
+                        $data[$key] = $this->getFirstTextElement($hit, $config);
+                    } else {
+                        $data[$key] = $this->getAllTextElements($hit, $config);
+                    }
+                    break;
             }
         }
 
