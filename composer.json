@@ -1,0 +1,7 @@
+{
+  "autoload-m": {
+    "psr-0": {
+      "Ixno\\WebCrawler\\":"lib/"
+    }
+  }
+}
