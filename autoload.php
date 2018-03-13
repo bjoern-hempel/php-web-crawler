@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+/* build lib root dir */
 $libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
 
 /* require all needed classes */
