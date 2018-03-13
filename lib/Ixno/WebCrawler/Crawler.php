@@ -29,6 +29,8 @@ require_once 'Source/Source.php';
 require_once 'Source/Data.php';
 require_once 'Source/Html.php';
 require_once 'Source/Url.php';
+require_once 'Converter/Converter.php';
+require_once 'Converter/DateParser.php';
 
 use ArrayIterator;
 use Exception;
@@ -41,6 +43,8 @@ use Ixno\WebCrawler\Source\Source;
 use Ixno\WebCrawler\Source\Html;
 use Ixno\WebCrawler\Source\Url;
 use Ixno\WebCrawler\Source\Data;
+
+use Ixno\WebCrawler\Converter\Converter;
 
 interface CrawlRule {
     public function getMapping();
@@ -185,9 +189,10 @@ class Crawler
     protected function normaliseConfig($config)
     {
         $defaultConfig = array(
-            'query' => null,
-            'prefix' => null,
-            'suffix' => null,
+            'query'     => null,
+            'prefix'    => null,
+            'suffix'    => null,
+            'converter' => null,
         );
 
         if (is_string($config)) {
@@ -208,6 +213,10 @@ class Crawler
     protected function buildText($text, Array $config)
     {
         $text = trim($text);
+
+        if ($config['converter'] instanceof Converter) {
+            $text = $config['converter']->getValue($text);
+        }
 
         if ($config['prefix'] !== null) {
             $text = $config['prefix'].$text;
