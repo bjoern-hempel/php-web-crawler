@@ -6,7 +6,7 @@ This php class allows you to crawl recursively a given webpage (or a given html 
 
 ### Basic usage (single webpage)
 
-```
+```php5
 <?php
 
 require_once('vendor/ixno/webcrawler/autoload.php');
