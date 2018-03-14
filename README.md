@@ -55,7 +55,7 @@ It returns:
 
 ### Basic usage with xpath group (single webpage)
 
-```
+```php5
 <?php
 
 require_once('vendor/ixno/webcrawler/autoload.php');
@@ -94,7 +94,7 @@ It returns the same json format as the basic example given before.
 
 ### Basic usage with xpath group (from given html file)
 
-```
+```php5
 <?php
 
 require_once('vendor/ixno/webcrawler/autoload.php');
@@ -133,7 +133,7 @@ It returns the same json format as the basic example given before.
 
 ### More complex example (recursive crawling)
 
-```
+```php5
 <?php
 
 require_once('vendor/ixno/webcrawler/autoload.php');
@@ -195,7 +195,7 @@ exit;
 
 It returns:
 
-```
+```json5
 [
     {
         "link": "https://www.page.tld/folder/subpage.html",
