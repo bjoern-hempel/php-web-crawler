@@ -9,7 +9,7 @@ This php class allows you to crawl recursively a given webpage (or a given html 
 ```
 <?php
 
-require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
+require_once('vendor/ixno/webcrawler/autoload.php');
 
 use Ixno\WebCrawler\Crawler;
 use Ixno\WebCrawler\Page;
@@ -58,7 +58,7 @@ It returns:
 ```
 <?php
 
-require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
+require_once('vendor/ixno/webcrawler/autoload.php');
 
 use Ixno\WebCrawler\Crawler;
 use Ixno\WebCrawler\Page;
@@ -97,7 +97,7 @@ It returns the same json format as the basic example given before.
 ```
 <?php
 
-require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
+require_once('vendor/ixno/webcrawler/autoload.php');
 
 use Ixno\WebCrawler\Crawler;
 use Ixno\WebCrawler\Page;
@@ -136,7 +136,7 @@ It returns the same json format as the basic example given before.
 ```
 <?php
 
-require_once('vendor/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php');
+require_once('vendor/ixno/webcrawler/autoload.php');
 
 use Ixno\WebCrawler\Crawler;
 
