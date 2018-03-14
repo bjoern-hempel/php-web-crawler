@@ -40,7 +40,7 @@ print json_encode($data);
 
 It returns:
 
-```json
+```js
 {
     "title": "Kraftstoffpreise geben leicht nach",
     "subtitle": "Preis für Brent-Öl bei 65 Dollar",
