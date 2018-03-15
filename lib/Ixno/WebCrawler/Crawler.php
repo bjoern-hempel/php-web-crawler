@@ -337,7 +337,7 @@ class Crawler
         return $data;
     }
 
-    public function getDataFromPage(DOMElement $page, DOMXPath $xpath)
+    public function getDataFromPage(DOMNode $page, DOMXPath $xpath)
     {
         $data = array();
 
