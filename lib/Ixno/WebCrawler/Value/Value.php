@@ -32,7 +32,7 @@ use DOMNode;
 
 abstract class Value
 {
-    protected $xpathQuery = null;
+    protected $value = null;
 
     protected $queries = array();
 
@@ -46,7 +46,7 @@ abstract class Value
 
         foreach ($parameters as $parameter) {
             if (is_string($parameter)) {
-                $this->xpathQuery = $parameter;
+                $this->value = $parameter;
                 continue;
             }
 
@@ -78,7 +78,7 @@ abstract class Value
 
     public function __toString()
     {
-        return $this->xpathQuery;
+        return $this->value;
     }
 
     abstract public function parse(DOMXPath $xpath, DOMNode $node = null);

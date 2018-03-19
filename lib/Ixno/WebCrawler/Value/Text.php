@@ -32,6 +32,6 @@ class Text extends Value
 {
     public function parse(DOMXPath $xpath, DOMNode $node = null)
     {
-        return $this->applyConverters($this->xpathQuery);
+        return $this->applyConverters($this->value);
     }
 }

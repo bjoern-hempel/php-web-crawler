@@ -32,7 +32,7 @@ class XpathTextnodes extends Value
 {
     public function parse(DOMXPath $xpath, DOMNode $node = null)
     {
-        $domNodeList = $xpath->query($this->xpathQuery, $node);
+        $domNodeList = $xpath->query($this->value, $node);
 
         if ($domNodeList->length === 0) {
             return array();
