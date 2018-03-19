@@ -23,18 +23,12 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler\Source;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
-
-//require_once $libDir.'/Converter/Converter.php';
-//require_once $libDir.'/Converter/DateParser.php';
-
+class File extends Source
+{
+    public function addSource($source)
+    {
+        $this->source = file_get_contents($source);
+    }
+}

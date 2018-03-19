@@ -23,18 +23,33 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
+include dirname(__FILE__).'/../autoload.php';
 
-//require_once $libDir.'/Converter/Converter.php';
-//require_once $libDir.'/Converter/DateParser.php';
+use Ixno\WebCrawler\Output\Field;
+use Ixno\WebCrawler\Output\Group;
+use Ixno\WebCrawler\Query\XpathField;
+use Ixno\WebCrawler\Source\Url;
+use Ixno\WebCrawler\Source\XpathSections;
 
+$url = 'https://en.wikipedia.org/w/index.php?title=Special:Search&profile=advanced&search=Pirates+of+the+Caribbean+movie&searchToken=1r1zctaiucfw60o9mwdgr5nku';
+
+$html = new Url(
+    $url,
+    new Field('title', new XpathField('//*[@id="firstHeading"]')),
+    new Group(
+        'hits',
+        new XpathSections(
+            '//*[@id="mw-content-text"]/div/ul/li',
+            new Field('title', new XpathField('./div[1]/a')),
+            new Field('link', new XpathField('./div[1]/a/@href'))
+        )
+    )
+);
+
+$data = json_encode($html->parse(), JSON_PRETTY_PRINT);
+
+print_r($data);
+
+echo "\n";

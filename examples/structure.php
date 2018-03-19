@@ -23,18 +23,33 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
+include dirname(__FILE__).'/../autoload.php';
 
-//require_once $libDir.'/Converter/Converter.php';
-//require_once $libDir.'/Converter/DateParser.php';
+use Ixno\WebCrawler\Output\Field;
+use Ixno\WebCrawler\Output\Group;
+use Ixno\WebCrawler\Query\XpathField;
+use Ixno\WebCrawler\Source\Url;
 
+$url = 'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_The_Curse_of_the_Black_Pearl';
+
+$html = new Url(
+    $url,
+    new Field('title', new XpathField('//*[@id="firstHeading"]/i')),
+    new Group(
+        'information',
+        new Group(
+            'person',
+            new Field('directed_by', new XpathField('/html/body//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a')),
+            new Field('produced_by', new XpathField('/html/body//*[@id="mw-content-text"]/div/table[1]//tr[4]/td/a')),
+            new Field('screenplay_by', new XpathField('/html/body//*[@id="mw-content-text"]/div/table[1]/tr[5]/td/div/ul/li/a'))
+        )
+    )
+);
+
+$data = json_encode($html->parse(), JSON_PRETTY_PRINT);
+
+print_r($data);
+
+echo "\n";

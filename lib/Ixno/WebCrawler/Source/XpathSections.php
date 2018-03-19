@@ -23,18 +23,28 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler\Source;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
+use DOMXPath;
+use DOMNode;
 
-//require_once $libDir.'/Converter/Converter.php';
-//require_once $libDir.'/Converter/DateParser.php';
+class XpathSections extends Source
+{
+    public function parse(DOMXPath $xpath = null, DOMNode $node = null, Array $data = array())
+    {
+        $collectedData = array();
 
+        $nodeList = $xpath->query($this->source, $node);
+
+        foreach ($nodeList as $node) {
+            array_push($collectedData, $this->doParse($xpath, $node, $data));
+        }
+
+        return $collectedData;
+    }
+
+    public function addSource($source)
+    {
+        $this->source = $source;
+    }
+}

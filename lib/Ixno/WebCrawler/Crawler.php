@@ -3,17 +3,17 @@
  * MIT License
  *
  * Copyright (c) 2018 Björn Hempel <bjoern@hempel.li>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,386 +23,197 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler;
+namespace Ixno\WebCrawler\Output;
 
-use ArrayIterator;
-use Exception;
-use DOMNode;
-use DOMDocument;
-use DOMElement;
-use DOMNodeList;
-use DOMXpath;
-
+use Ixno\WebCrawler\Query\Query;
 use Ixno\WebCrawler\Source\Source;
-use Ixno\WebCrawler\Source\Html;
-use Ixno\WebCrawler\Source\Url;
-use Ixno\WebCrawler\Source\Data;
 
-use Ixno\WebCrawler\Converter\Converter;
+use DOMXPath;
+use DOMNode;
 
-interface CrawlRule {
-    public function getMapping();
-    public function getDomElements(DOMXpath $xpath);
-    public function getCrawler();
-}
-
-class Page extends ArrayIterator implements CrawlRule
+abstract class Output
 {
-    protected $crawler = null;
+    protected $name = null;
 
-    public function __construct(XpathSet $mapping, Crawler $crawler = null)
+    protected $queries = array();
+
+    protected $outputs = array();
+
+    protected $sources = array();
+
+    public function __construct()
     {
-        parent::__construct($mapping);
+        $parameters = func_get_args();
 
-        $this->crawler = $crawler;
+        foreach ($parameters as $parameter) {
+            if (is_string($parameter)) {
+                $this->name = $parameter;
+                continue;
+            }
+
+            if ($parameter instanceof Query) {
+                array_push($this->queries, $parameter);
+                continue;
+            }
+
+            if ($parameter instanceof Output) {
+                array_push($this->outputs, $parameter);
+                continue;
+            }
+
+            if ($parameter instanceof Source) {
+                array_push($this->sources, $parameter);
+                continue;
+            }
+        }
     }
 
-    public function getMapping()
+    public function getName()
     {
-        return $this;
+        return $this->name;
     }
 
-    public function getDomElements(DOMXpath $xpath)
+    protected function getData($data)
     {
-        return $xpath->query('/')->item(0);
-    }
-
-    public function getCrawler()
-    {
-        return $this->crawler;
-    }
-}
-
-class PageGroup implements CrawlRule
-{
-    protected $xpath = null;
-
-    protected $page = null;
-
-    protected $crawler = null;
-
-    public function __construct(Xpath $xpath, Page $page, Crawler $crawler = null)
-    {
-        $this->xpath = $xpath;
-        $this->page = $page;
-        $this->crawler = $crawler;
-    }
-
-    public function getMapping()
-    {
-        return $this->page;
-    }
-
-    public function getDomElements(DOMXpath $xpath)
-    {
-        $domNodeList = $xpath->query($this->xpath);
-
-        if (count($domNodeList) <= 0) {
-            return null;
+        if ($this->getName() !== null) {
+            return array($this->getName() => $data);
         }
 
-        return $domNodeList->item(0);
+        return array($data);
     }
 
-    public function getCrawler()
-    {
-        return $this->crawler;
-    }
-}
+    abstract public function parse(DOMXPath $xpath, DOMNode $node = null);
+};
 
-class PageList implements CrawlRule
+class Group extends Output
 {
-    protected $xpath = null;
-
-    protected $page = null;
-
-    protected $crawler = null;
-
-    public function __construct(Xpath $xpath, Page $page, Crawler $crawler = null)
+    public function parse(DOMXPath $xpath, DOMNode $node = null)
     {
-        $this->xpath = $xpath;
-        $this->page = $page;
-        $this->crawler = $crawler;
-    }
+        $data = array();
 
-    public function getMapping()
-    {
-        return $this->page;
-    }
-
-    public function getDomElements(DOMXpath $xpath)
-    {
-        $domNodeList = $xpath->query($this->xpath);
-
-        if (count($domNodeList) <= 0) {
-            return null;
+        foreach ($this->outputs as $output) {
+            $data = array_merge_recursive($data, $output->parse($xpath, $node));
         }
 
-        return $domNodeList;
-    }
+        foreach ($this->sources as $source) {
+            $data = array_merge_recursive($data, $source->parse($xpath, $node));
+        }
 
-    public function getCrawler()
+        return $this->getData($data);
+    }
+}
+
+class Field extends Output
+{
+    public function parse(DOMXPath $xpath, DOMNode $node = null)
     {
-        return $this->crawler;
+        if (count($this->queries) === 0) {
+            return $this->getData(null);
+        }
+
+        if (count($this->queries) === 1) {
+            return $this->getData($this->queries[0]->parse($xpath, $node));
+        }
+
+        $data = array();
+
+        foreach ($this->queries as $query) {
+            array_push($data, $query->parse($xpath, $node));
+        }
+
+        return $this->getData($data);
     }
 }
 
 
 
-class Xpath
-{
-    protected $xpath;
 
-    public function __construct($xpath)
+
+
+namespace Ixno\WebCrawler\Query;
+
+use Ixno\WebCrawler\Output\Output;
+use DOMXPath;
+use DOMNode;
+
+abstract class Query
+{
+    protected $xpathQuery = null;
+
+    protected $queries = array();
+
+    protected $outputs = array();
+
+    public function __construct()
     {
-        $this->xpath = $xpath;
+        $parameters = func_get_args();
+
+        foreach ($parameters as $parameter) {
+            if (is_string($parameter)) {
+                $this->xpathQuery = $parameter;
+                continue;
+            }
+
+            if ($parameter instanceof Query) {
+                array_push($this->queries, $parameter);
+                continue;
+            }
+
+            if ($parameter instanceof Output) {
+                array_push($this->outputs, $parameter);
+                continue;
+            }
+        }
     }
 
     public function __toString()
     {
-        return $this->xpath;
+        return $this->xpathQuery;
     }
-}
 
-class XpathSet extends ArrayIterator {}
+    abstract public function parse(DOMXPath $xpath, DOMNode $node = null);
+};
 
-
-
-class Crawler
+class XpathField extends Query
 {
-    protected $crawlRule = null;
-
-    protected $source = null;
-
-    public function __construct(Source $source, CrawlRule $crawlRule)
+    public function parse(DOMXPath $xpath, DOMNode $node = null)
     {
-        $this->source = $source;
-        $this->crawlRule = $crawlRule;
-    }
+        $domNodeList = $xpath->query($this->xpathQuery, $node);
 
-    protected function normaliseConfig($config)
-    {
-        $defaultConfig = array(
-            'query'     => null,
-            'prefix'    => null,
-            'suffix'    => null,
-            'converter' => null,
-            'content'   => 'text',
-            'output'    => 'auto',
-        );
-
-        if (is_string($config)) {
-            $config = array(
-                'query' => $config,
-            );
+        if ($domNodeList->length === 0) {
+            return null;
         }
 
-        if (!is_array($config)) {
-            throw new Exception('Config must be an array.');
+        if ($domNodeList->length === 1) {
+            return $domNodeList->item(0)->textContent;
         }
 
-        $config = array_merge($defaultConfig, $config);
-
-        return $config;
-    }
-
-    protected function clearHtml($html, Array $allowedTags = array('<br>', '<b>', '<i>', '<u>'))
-    {
-        $html = preg_replace('~<script(.*?)>(.*?)</script>~is', '', $html);
-        $html = strip_tags($html, implode('', $allowedTags));
-        $html = str_replace('</br>', '', $html);
-        $html = trim($html);
-
-        return $html;
-    }
-
-    protected function clearText($text)
-    {
-        $text = trim($text);
-
-        return $text;
-    }
-
-    protected function buildText(DOMNode $domNode, Array $config)
-    {
-        switch ($config['content']) {
-            case 'html':
-                $text = $this->clearHtml($domNode->C14N());
-                break;
-
-            default:
-                $text = $this->clearText($domNode->textContent);
-                break;
-        }
-
-        if ($config['converter'] instanceof Converter) {
-            $text = $config['converter']->getValue($text);
-        }
-
-        if ($config['prefix'] !== null) {
-            $text = $config['prefix'].$text;
-        }
-
-        if ($config['suffix'] !== null) {
-            $text .= $config['suffix'];
-        }
-
-        return $text;
-    }
-
-    protected function getFirstTextElement(DOMNodeList $domNodeList, Array $config)
-    {
-        foreach ($domNodeList as $domNode) {
-            return $this->buildText($domNode, $config);
-        }
-    }
-
-    protected function getAllTextElements(DOMNodeList $domNodeList, Array $config)
-    {
         $data = array();
 
         foreach ($domNodeList as $domNode) {
-            array_push($data, $this->buildText($domNode, $config));
+            array_push($data, $domNode->textContent);
         }
 
         return $data;
-    }
-
-    protected function curlHtml($url)
-    {
-	$timeout = 5;
-        $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36';
-
-        $ch = curl_init();
-
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-
-	$data = curl_exec($ch);
-
-	curl_close($ch);
-
-	return $data;
-    }
-
-    protected function evalSource(Source $source, Array $data)
-    {
-        if ($source instanceof Data) {
-            if (!array_key_exists((string)$source, $data)) {
-                throw new Exception(sprintf('Index "%s" was not found within the $data array.', $source));
-            }
-
-            $source = new Url($data[(string)$source]);
-        }
-
-        if ($source instanceof Url) {
-            $html = $this->curlHtml((string)$source);
-
-            $source = new Html($html);
-        }
-
-        return $source;
-    }
-
-    public function getData(DOMXPath $xpath)
-    {
-        $domElements = $this->crawlRule->getDomElements($xpath);
-
-        switch(true) {
-            case $domElements instanceof DOMNodeList:
-                return $this->getDataFromPages($domElements, $xpath);
-                break;
-
-            case $this->crawlRule instanceof PageGroup:
-            case $this->crawlRule instanceof Page:
-                return $this->getDataFromPage($domElements, $xpath);
-                break;
-
-            default:
-                return array();
-                break;
-        }
-    }
-
-    public function getDataFromPages(DOMNodeList $pages, DOMXPath $xpath)
-    {
-        $data = array();
-
-        foreach ($pages as $page) {
-            array_push($data, $this->getDataFromPage($page, $xpath));
-        }
-
-        return $data;
-    }
-
-    public function getDataFromPage(DOMNode $page, DOMXPath $xpath)
-    {
-        $data = array();
-
-        if ($page === null) {
-            return $data;
-        }
-
-        foreach ($this->crawlRule->getMapping() as $key => $config) {
-            $config = $this->normaliseConfig($config);
-
-            $hit = $xpath->query($config['query'], $page);
-
-            if ($hit->length <= 0) {
-                continue;
-            }
-
-            switch ($config['output']) {
-                /* simple */
-                case 'simple':
-                    $data[$key] = $this->getFirstTextElement($hit, $config);
-                    break;
-
-                /* multiple */
-                case 'multiple':
-                    $data[$key] = $this->getAllTextElements($hit, $config);
-                    break;
-
-                /* auto */
-                default:
-                    if ($hit->length === 1) {
-                        $data[$key] = $this->getFirstTextElement($hit, $config);
-                    } else {
-                        $data[$key] = $this->getAllTextElements($hit, $config);
-                    }
-                    break;
-            }
-        }
-
-        /* new crawler detected → crawl next subpage */
-        if ($this->crawlRule->getCrawler() instanceof Crawler) {
-            $data = $this->crawlRule->getCrawler()->crawl($data);
-        }
-
-        return $data;
-    }
-
-    public function crawl(Array $data = array())
-    {
-        $source = clone $this->source;
-
-        $source = $this->evalSource($source, $data);
-
-        if (!$source instanceof Html) {
-            throw new Exception('Source must be an instance of Html.');
-        }
-
-        $doc = new DOMDocument();
-
-        libxml_use_internal_errors(true);
-        $doc->loadHTML($source);
-        libxml_clear_errors();
-
-        $xpath = new DOMXpath($doc);
-
-        return array_merge($data, $this->getData($xpath));
     }
 }
 
+class XpathFields extends Query
+{
+    public function parse(DOMXPath $xpath, DOMNode $node = null)
+    {
+        $domNodeList = $xpath->query($this->xpathQuery, $node);
+
+        if ($domNodeList->length === 0) {
+            return array();
+        }
+
+        $data = array();
+
+        foreach ($domNodeList as $domNode) {
+            array_push($data, $domNode->textContent);
+        }
+
+        return $data;
+    }
+}
