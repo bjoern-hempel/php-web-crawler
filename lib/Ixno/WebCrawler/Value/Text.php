@@ -23,29 +23,15 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler\Query;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
+use DOMXPath;
+use DOMNode;
 
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
-
-require_once $libDir.'/Output/Output.php';
-require_once $libDir.'/Output/Field.php';
-require_once $libDir.'/Output/Group.php';
-
-require_once $libDir.'/Value/Value.php';
-require_once $libDir.'/Value/Text.php';
-require_once $libDir.'/Value/XpathTextnode.php';
-require_once $libDir.'/Value/XpathTextnodes.php';
-
-require_once $libDir.'/Converter/Converter.php';
-require_once $libDir.'/Converter/DateParser.php';
-require_once $libDir.'/Converter/PregReplace.php';
-require_once $libDir.'/Converter/Trim.php';
+class Text extends Value
+{
+    public function parse(DOMXPath $xpath, DOMNode $node = null)
+    {
+        return $this->applyConverters($this->xpathQuery);
+    }
+}

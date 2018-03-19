@@ -31,6 +31,7 @@ use Ixno\WebCrawler\Converter\DateParser;
 use Ixno\WebCrawler\Converter\PregReplace;
 use Ixno\WebCrawler\Converter\Trim;
 use Ixno\WebCrawler\Output\Field;
+use Ixno\WebCrawler\Query\Text;
 use Ixno\WebCrawler\Query\XpathTextnode;
 use Ixno\WebCrawler\Source\File;
 
@@ -38,6 +39,12 @@ $file = dirname(__FILE__).'/converter.html';
 
 $html = new File(
     $file,
+    new Field(
+        'version',
+        new Text(
+            '1.0'
+        )
+    ),
     new Field(
         'title',
         new XpathTextnode(
