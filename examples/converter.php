@@ -38,7 +38,13 @@ $file = dirname(__FILE__).'/converter.html';
 
 $html = new File(
     $file,
-    new Field('title', new XpathField('//*[@id="title-overview-widget"]/div[2]/div[2]/div/div[2]/div[2]/h1', new Trim())),
+    new Field(
+        'title',
+        new XpathField(
+            '//*[@id="title-overview-widget"]/div[2]/div[2]/div/div[2]/div[2]/h1',
+            new Trim()
+        )
+    ),
     new Field(
         'date',
         new XpathField(
