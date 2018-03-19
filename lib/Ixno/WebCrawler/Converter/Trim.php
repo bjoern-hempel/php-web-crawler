@@ -23,27 +23,13 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Query;
+namespace Ixno\WebCrawler\Converter;
 
-use DOMXPath;
-use DOMNode;
-
-class XpathFields extends Query
+class Trim implements Converter
 {
-    public function parse(DOMXPath $xpath, DOMNode $node = null)
+    public function getValue($value)
     {
-        $domNodeList = $xpath->query($this->xpathQuery, $node);
-
-        if ($domNodeList->length === 0) {
-            return array();
-        }
-
-        $data = array();
-
-        foreach ($domNodeList as $domNode) {
-            array_push($data, $this->applyConverters($domNode->textContent));
-        }
-
-        return $data;
+        return trim($value);
     }
 }
+

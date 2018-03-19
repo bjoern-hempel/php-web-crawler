@@ -25,6 +25,7 @@
 
 namespace Ixno\WebCrawler\Query;
 
+use Ixno\WebCrawler\Converter\Converter;
 use Ixno\WebCrawler\Output\Output;
 use DOMXPath;
 use DOMNode;
@@ -36,6 +37,8 @@ abstract class Query
     protected $queries = array();
 
     protected $outputs = array();
+
+    protected $converters = array();
 
     public function __construct()
     {
@@ -56,7 +59,21 @@ abstract class Query
                 array_push($this->outputs, $parameter);
                 continue;
             }
+
+            if ($parameter instanceof Converter) {
+                array_push($this->converters, $parameter);
+                continue;
+            }
         }
+    }
+
+    protected function applyConverters($value)
+    {
+        foreach ($this->converters as $converter) {
+            $value = $converter->getValue($value);
+        }
+
+        return $value;
     }
 
     public function __toString()

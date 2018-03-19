@@ -39,13 +39,13 @@ class XpathField extends Query
         }
 
         if ($domNodeList->length === 1) {
-            return $domNodeList->item(0)->textContent;
+            return $this->applyConverters($domNodeList->item(0)->textContent);
         }
 
         $data = array();
 
         foreach ($domNodeList as $domNode) {
-            array_push($data, $domNode->textContent);
+            array_push($data, $this->applyConverters($domNode->textContent));
         }
 
         return $data;

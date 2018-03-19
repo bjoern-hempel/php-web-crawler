@@ -23,27 +23,24 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Query;
+namespace Ixno\WebCrawler\Converter;
 
-use DOMXPath;
-use DOMNode;
-
-class XpathFields extends Query
+class PregReplace implements Converter
 {
-    public function parse(DOMXPath $xpath, DOMNode $node = null)
+    protected $pattern = null;
+
+    protected $replacement = '';
+
+    public function __construct($pattern, $replacement = '')
     {
-        $domNodeList = $xpath->query($this->xpathQuery, $node);
+        $this->pattern = $pattern;
 
-        if ($domNodeList->length === 0) {
-            return array();
-        }
+        $this->replacement = $replacement;
+    }
 
-        $data = array();
-
-        foreach ($domNodeList as $domNode) {
-            array_push($data, $this->applyConverters($domNode->textContent));
-        }
-
-        return $data;
+    public function getValue($value)
+    {
+        return preg_replace($this->pattern, $this->replacement, $value);
     }
 }
+

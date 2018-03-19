@@ -23,27 +23,35 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Query;
+namespace Ixno\WebCrawler;
 
-use DOMXPath;
-use DOMNode;
+include dirname(__FILE__).'/../autoload.php';
 
-class XpathFields extends Query
-{
-    public function parse(DOMXPath $xpath, DOMNode $node = null)
-    {
-        $domNodeList = $xpath->query($this->xpathQuery, $node);
+use Ixno\WebCrawler\Converter\DateParser;
+use Ixno\WebCrawler\Converter\PregReplace;
+use Ixno\WebCrawler\Converter\Trim;
+use Ixno\WebCrawler\Output\Field;
+use Ixno\WebCrawler\Query\XpathField;
+use Ixno\WebCrawler\Source\File;
 
-        if ($domNodeList->length === 0) {
-            return array();
-        }
+$file = dirname(__FILE__).'/converter.html';
 
-        $data = array();
+$html = new File(
+    $file,
+    new Field('title', new XpathField('//*[@id="title-overview-widget"]/div[2]/div[2]/div/div[2]/div[2]/h1', new Trim())),
+    new Field(
+        'date',
+        new XpathField(
+            '//*[@id="title-overview-widget"]/div[2]/div[2]/div/div[2]/div[2]/div[2]/a[4]',
+            new Trim(),
+            new PregReplace('~ \([^\(]+\)~', ''),
+            new DateParser('d M Y H:i:s', '%s 12:00:00')
+        )
+    )
+);
 
-        foreach ($domNodeList as $domNode) {
-            array_push($data, $this->applyConverters($domNode->textContent));
-        }
+$data = json_encode($html->parse(), JSON_PRETTY_PRINT);
 
-        return $data;
-    }
-}
+print_r($data);
+
+echo "\n";

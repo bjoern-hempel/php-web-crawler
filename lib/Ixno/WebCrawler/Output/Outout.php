@@ -25,6 +25,7 @@
 
 namespace Ixno\WebCrawler\Output;
 
+use Ixno\WebCrawler\Converter\Converter;
 use Ixno\WebCrawler\Query\Query;
 use Ixno\WebCrawler\Source\Source;
 
@@ -40,6 +41,8 @@ abstract class Output
     protected $outputs = array();
 
     protected $sources = array();
+
+    protected $converters = array();
 
     public function __construct()
     {
@@ -63,6 +66,11 @@ abstract class Output
 
             if ($parameter instanceof Source) {
                 array_push($this->sources, $parameter);
+                continue;
+            }
+
+            if ($parameter instanceof Converter) {
+                array_push($this->converters, $parameter);
                 continue;
             }
         }

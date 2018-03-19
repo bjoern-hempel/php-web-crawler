@@ -44,6 +44,7 @@ require_once $libDir.'/Query/Query.php';
 require_once $libDir.'/Query/XpathField.php';
 require_once $libDir.'/Query/XpathFields.php';
 
-//require_once $libDir.'/Converter/Converter.php';
-//require_once $libDir.'/Converter/DateParser.php';
-
+require_once $libDir.'/Converter/Converter.php';
+require_once $libDir.'/Converter/DateParser.php';
+require_once $libDir.'/Converter/PregReplace.php';
+require_once $libDir.'/Converter/Trim.php';
