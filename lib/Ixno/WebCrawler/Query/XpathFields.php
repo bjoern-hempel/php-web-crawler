@@ -23,27 +23,27 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler\Query;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
+use DOMXPath;
+use DOMNode;
 
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
+class XpathFields extends Query
+{
+    public function parse(DOMXPath $xpath, DOMNode $node = null)
+    {
+        $domNodeList = $xpath->query($this->xpathQuery, $node);
 
-require_once $libDir.'/Output/Outout.php';
-require_once $libDir.'/Output/Field.php';
-require_once $libDir.'/Output/Group.php';
+        if ($domNodeList->length === 0) {
+            return array();
+        }
 
-require_once $libDir.'/Query/Query.php';
-require_once $libDir.'/Query/XpathField.php';
-require_once $libDir.'/Query/XpathFields.php';
+        $data = array();
 
-//require_once $libDir.'/Converter/Converter.php';
-//require_once $libDir.'/Converter/DateParser.php';
+        foreach ($domNodeList as $domNode) {
+            array_push($data, $domNode->textContent);
+        }
 
+        return $data;
+    }
+}

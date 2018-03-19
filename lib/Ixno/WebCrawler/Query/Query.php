@@ -23,27 +23,46 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler\Query;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
+use Ixno\WebCrawler\Output\Output;
+use DOMXPath;
+use DOMNode;
 
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
+abstract class Query
+{
+    protected $xpathQuery = null;
 
-require_once $libDir.'/Output/Outout.php';
-require_once $libDir.'/Output/Field.php';
-require_once $libDir.'/Output/Group.php';
+    protected $queries = array();
 
-require_once $libDir.'/Query/Query.php';
-require_once $libDir.'/Query/XpathField.php';
-require_once $libDir.'/Query/XpathFields.php';
+    protected $outputs = array();
 
-//require_once $libDir.'/Converter/Converter.php';
-//require_once $libDir.'/Converter/DateParser.php';
+    public function __construct()
+    {
+        $parameters = func_get_args();
 
+        foreach ($parameters as $parameter) {
+            if (is_string($parameter)) {
+                $this->xpathQuery = $parameter;
+                continue;
+            }
+
+            if ($parameter instanceof Query) {
+                array_push($this->queries, $parameter);
+                continue;
+            }
+
+            if ($parameter instanceof Output) {
+                array_push($this->outputs, $parameter);
+                continue;
+            }
+        }
+    }
+
+    public function __toString()
+    {
+        return $this->xpathQuery;
+    }
+
+    abstract public function parse(DOMXPath $xpath, DOMNode $node = null);
+}
