@@ -6,7 +6,7 @@ include '../autoload.php';
 
 use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Output\Group;
-use Ixno\WebCrawler\Query\XpathTextnode;
+use Ixno\WebCrawler\Value\XpathTextnode;
 use Ixno\WebCrawler\Source\XpathSections;
 use Ixno\WebCrawler\Source\File;
 

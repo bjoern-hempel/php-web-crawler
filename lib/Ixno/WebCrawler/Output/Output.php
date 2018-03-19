@@ -26,7 +26,7 @@
 namespace Ixno\WebCrawler\Output;
 
 use Ixno\WebCrawler\Converter\Converter;
-use Ixno\WebCrawler\Query\Value;
+use Ixno\WebCrawler\Value\Value;
 use Ixno\WebCrawler\Source\Source;
 
 use DOMXPath;

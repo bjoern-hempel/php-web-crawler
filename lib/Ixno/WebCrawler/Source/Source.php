@@ -31,7 +31,7 @@ use DOMNode;
 
 use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Output\Output;
-use Ixno\WebCrawler\Query\Value;
+use Ixno\WebCrawler\Value\Value;
 
 abstract class Source
 {

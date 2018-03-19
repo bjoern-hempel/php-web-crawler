@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Query;
+namespace Ixno\WebCrawler\Value;
 
 use DOMXPath;
 use DOMNode;

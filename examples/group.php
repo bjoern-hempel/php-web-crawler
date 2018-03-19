@@ -29,7 +29,7 @@ include dirname(__FILE__).'/../autoload.php';
 
 use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Output\Group;
-use Ixno\WebCrawler\Query\XpathTextnode;
+use Ixno\WebCrawler\Value\XpathTextnode;
 use Ixno\WebCrawler\Source\Url;
 
 $url = 'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_The_Curse_of_the_Black_Pearl';

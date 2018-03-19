@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Query;
+namespace Ixno\WebCrawler\Value;
 
 use Ixno\WebCrawler\Converter\Converter;
 use Ixno\WebCrawler\Output\Output;
