@@ -30,7 +30,7 @@ use Ixno\WebCrawler\Output\Output;
 use DOMXPath;
 use DOMNode;
 
-abstract class Query
+abstract class Value
 {
     protected $xpathQuery = null;
 
@@ -50,7 +50,7 @@ abstract class Query
                 continue;
             }
 
-            if ($parameter instanceof Query) {
+            if ($parameter instanceof Value) {
                 array_push($this->queries, $parameter);
                 continue;
             }

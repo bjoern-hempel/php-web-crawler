@@ -28,18 +28,14 @@ namespace Ixno\WebCrawler\Query;
 use DOMXPath;
 use DOMNode;
 
-class XpathTextnode extends Query
+class XpathTextnodes extends Value
 {
     public function parse(DOMXPath $xpath, DOMNode $node = null)
     {
         $domNodeList = $xpath->query($this->xpathQuery, $node);
 
         if ($domNodeList->length === 0) {
-            return null;
-        }
-
-        if ($domNodeList->length === 1) {
-            return $this->applyConverters($domNodeList->item(0)->textContent);
+            return array();
         }
 
         $data = array();

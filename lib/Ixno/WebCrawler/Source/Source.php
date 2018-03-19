@@ -31,7 +31,7 @@ use DOMNode;
 
 use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Output\Output;
-use Ixno\WebCrawler\Query\Query;
+use Ixno\WebCrawler\Query\Value;
 
 abstract class Source
 {
@@ -59,8 +59,8 @@ abstract class Source
                 continue;
             }
 
-            /* convert Query object to Output object */
-            if ($parameter instanceof Query) {
+            /* convert Value object to Output object */
+            if ($parameter instanceof Value) {
                 array_push($this->outputs, new Field($parameter));
                 continue;
             }

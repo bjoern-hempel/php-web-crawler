@@ -25,4 +25,4 @@
 
 namespace Ixno\WebCrawler;
 
-/* TODO: Rename Query to Value */
+/* TODO: Rename Value to Value */

@@ -40,9 +40,9 @@ require_once $libDir.'/Output/Output.php';
 require_once $libDir.'/Output/Field.php';
 require_once $libDir.'/Output/Group.php';
 
-require_once $libDir.'/Query/Query.php';
-require_once $libDir.'/Query/XpathTextnode.php';
-require_once $libDir.'/Query/XpathTextnodes.php';
+require_once $libDir.'/Value/Value.php';
+require_once $libDir.'/Value/XpathTextnode.php';
+require_once $libDir.'/Value/XpathTextnodes.php';
 
 require_once $libDir.'/Converter/Converter.php';
 require_once $libDir.'/Converter/DateParser.php';

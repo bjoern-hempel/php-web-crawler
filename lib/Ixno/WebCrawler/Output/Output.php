@@ -26,7 +26,7 @@
 namespace Ixno\WebCrawler\Output;
 
 use Ixno\WebCrawler\Converter\Converter;
-use Ixno\WebCrawler\Query\Query;
+use Ixno\WebCrawler\Query\Value;
 use Ixno\WebCrawler\Source\Source;
 
 use DOMXPath;
@@ -54,7 +54,7 @@ abstract class Output
                 continue;
             }
 
-            if ($parameter instanceof Query) {
+            if ($parameter instanceof Value) {
                 array_push($this->queries, $parameter);
                 continue;
             }
