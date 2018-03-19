@@ -23,23 +23,29 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler\Output;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
+use DOMXPath;
+use DOMNode;
 
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
+class Field extends Output
+{
+    public function parse(DOMXPath $xpath, DOMNode $node = null)
+    {
+        if (count($this->queries) === 0) {
+            return $this->getData(null);
+        }
 
-require_once $libDir.'/Output/Outout.php';
-require_once $libDir.'/Output/Field.php';
-require_once $libDir.'/Output/Group.php';
+        if (count($this->queries) === 1) {
+            return $this->getData($this->queries[0]->parse($xpath, $node));
+        }
 
-//require_once $libDir.'/Converter/Converter.php';
-//require_once $libDir.'/Converter/DateParser.php';
+        $data = array();
 
+        foreach ($this->queries as $query) {
+            array_push($data, $query->parse($xpath, $node));
+        }
+
+        return $this->getData($data);
+    }
+}

@@ -23,20 +23,23 @@
  * SOFTWARE.
  */
 
+namespace Ixno\WebCrawler\Output;
 
-namespace Ixno\WebCrawler\Query;
+use Ixno\WebCrawler\Query\Query;
+use Ixno\WebCrawler\Source\Source;
 
-use Ixno\WebCrawler\Output\Output;
 use DOMXPath;
 use DOMNode;
 
-abstract class Query
+abstract class Output
 {
-    protected $xpathQuery = null;
+    protected $name = null;
 
     protected $queries = array();
 
     protected $outputs = array();
+
+    protected $sources = array();
 
     public function __construct()
     {
@@ -44,7 +47,7 @@ abstract class Query
 
         foreach ($parameters as $parameter) {
             if (is_string($parameter)) {
-                $this->xpathQuery = $parameter;
+                $this->name = $parameter;
                 continue;
             }
 
@@ -57,57 +60,27 @@ abstract class Query
                 array_push($this->outputs, $parameter);
                 continue;
             }
+
+            if ($parameter instanceof Source) {
+                array_push($this->sources, $parameter);
+                continue;
+            }
         }
     }
 
-    public function __toString()
+    public function getName()
     {
-        return $this->xpathQuery;
+        return $this->name;
+    }
+
+    protected function getData($data)
+    {
+        if ($this->getName() !== null) {
+            return array($this->getName() => $data);
+        }
+
+        return array($data);
     }
 
     abstract public function parse(DOMXPath $xpath, DOMNode $node = null);
-};
-
-class XpathField extends Query
-{
-    public function parse(DOMXPath $xpath, DOMNode $node = null)
-    {
-        $domNodeList = $xpath->query($this->xpathQuery, $node);
-
-        if ($domNodeList->length === 0) {
-            return null;
-        }
-
-        if ($domNodeList->length === 1) {
-            return $domNodeList->item(0)->textContent;
-        }
-
-        $data = array();
-
-        foreach ($domNodeList as $domNode) {
-            array_push($data, $domNode->textContent);
-        }
-
-        return $data;
-    }
-}
-
-class XpathFields extends Query
-{
-    public function parse(DOMXPath $xpath, DOMNode $node = null)
-    {
-        $domNodeList = $xpath->query($this->xpathQuery, $node);
-
-        if ($domNodeList->length === 0) {
-            return array();
-        }
-
-        $data = array();
-
-        foreach ($domNodeList as $domNode) {
-            array_push($data, $domNode->textContent);
-        }
-
-        return $data;
-    }
 }
