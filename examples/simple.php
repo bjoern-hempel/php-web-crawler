@@ -28,6 +28,7 @@ namespace Ixno\WebCrawler;
 include dirname(__FILE__).'/../autoload.php';
 
 use Ixno\WebCrawler\Output\Field;
+use Ixno\WebCrawler\Query\Text;
 use Ixno\WebCrawler\Query\XpathTextnode;
 use Ixno\WebCrawler\Source\Url;
 
@@ -35,6 +36,7 @@ $url = 'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_The_Curse_of_the
 
 $html = new Url(
     $url,
+    new Field('version', new Text('1.0.0')),
     new Field('title', new XpathTextnode('//*[@id="firstHeading"]/i')),
     new Field('directed_by', new XpathTextnode('//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a'))
 );
