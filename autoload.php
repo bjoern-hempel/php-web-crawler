@@ -36,7 +36,7 @@ require_once $libDir.'/Source/Url.php';
 require_once $libDir.'/Source/XpathSection.php';
 require_once $libDir.'/Source/XpathSections.php';
 
-require_once $libDir.'/Output/Outout.php';
+require_once $libDir.'/Output/Output.php';
 require_once $libDir.'/Output/Field.php';
 require_once $libDir.'/Output/Group.php';
 
