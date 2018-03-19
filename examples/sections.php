@@ -29,7 +29,7 @@ include dirname(__FILE__).'/../autoload.php';
 
 use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Output\Group;
-use Ixno\WebCrawler\Query\XpathField;
+use Ixno\WebCrawler\Query\XpathTextnode;
 use Ixno\WebCrawler\Source\Url;
 use Ixno\WebCrawler\Source\XpathSections;
 
@@ -37,13 +37,13 @@ $url = 'https://en.wikipedia.org/w/index.php?title=Special:Search&profile=advanc
 
 $html = new Url(
     $url,
-    new Field('title', new XpathField('//*[@id="firstHeading"]')),
+    new Field('title', new XpathTextnode('//*[@id="firstHeading"]')),
     new Group(
         'hits',
         new XpathSections(
             '//*[@id="mw-content-text"]/div/ul/li',
-            new Field('title', new XpathField('./div[1]/a')),
-            new Field('link', new XpathField('./div[1]/a/@href'))
+            new Field('title', new XpathTextnode('./div[1]/a')),
+            new Field('link', new XpathTextnode('./div[1]/a/@href'))
         )
     )
 );

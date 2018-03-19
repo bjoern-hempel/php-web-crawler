@@ -29,21 +29,21 @@ include dirname(__FILE__).'/../autoload.php';
 
 use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Output\Group;
-use Ixno\WebCrawler\Query\XpathField;
+use Ixno\WebCrawler\Query\XpathTextnode;
 use Ixno\WebCrawler\Source\Url;
 
 $url = 'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_The_Curse_of_the_Black_Pearl';
 
 $html = new Url(
     $url,
-    new Field('title', new XpathField('//*[@id="firstHeading"]/i')),
+    new Field('title', new XpathTextnode('//*[@id="firstHeading"]/i')),
     new Group(
         'information',
         new Group(
             'person',
-            new Field('directed_by', new XpathField('/html/body//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a')),
-            new Field('produced_by', new XpathField('/html/body//*[@id="mw-content-text"]/div/table[1]//tr[4]/td/a')),
-            new Field('screenplay_by', new XpathField('/html/body//*[@id="mw-content-text"]/div/table[1]/tr[5]/td/div/ul/li/a'))
+            new Field('directed_by', new XpathTextnode('/html/body//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a')),
+            new Field('produced_by', new XpathTextnode('/html/body//*[@id="mw-content-text"]/div/table[1]//tr[4]/td/a')),
+            new Field('screenplay_by', new XpathTextnode('/html/body//*[@id="mw-content-text"]/div/table[1]/tr[5]/td/div/ul/li/a'))
         )
     )
 );

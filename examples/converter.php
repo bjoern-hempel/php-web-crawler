@@ -31,7 +31,7 @@ use Ixno\WebCrawler\Converter\DateParser;
 use Ixno\WebCrawler\Converter\PregReplace;
 use Ixno\WebCrawler\Converter\Trim;
 use Ixno\WebCrawler\Output\Field;
-use Ixno\WebCrawler\Query\XpathField;
+use Ixno\WebCrawler\Query\XpathTextnode;
 use Ixno\WebCrawler\Source\File;
 
 $file = dirname(__FILE__).'/converter.html';
@@ -40,14 +40,14 @@ $html = new File(
     $file,
     new Field(
         'title',
-        new XpathField(
+        new XpathTextnode(
             '//*[@id="title-overview-widget"]/div[2]/div[2]/div/div[2]/div[2]/h1',
             new Trim()
         )
     ),
     new Field(
         'date',
-        new XpathField(
+        new XpathTextnode(
             '//*[@id="title-overview-widget"]/div[2]/div[2]/div/div[2]/div[2]/div[2]/a[4]',
             new Trim(),
             new PregReplace('~ \([^\(]+\)~', ''),

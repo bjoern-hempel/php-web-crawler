@@ -28,15 +28,15 @@ namespace Ixno\WebCrawler;
 include dirname(__FILE__).'/../autoload.php';
 
 use Ixno\WebCrawler\Output\Field;
-use Ixno\WebCrawler\Query\XpathField;
+use Ixno\WebCrawler\Query\XpathTextnode;
 use Ixno\WebCrawler\Source\Url;
 
 $url = 'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_The_Curse_of_the_Black_Pearl';
 
 $html = new Url(
     $url,
-    new Field('title', new XpathField('//*[@id="firstHeading"]/i')),
-    new Field('directed_by', new XpathField('//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a'))
+    new Field('title', new XpathTextnode('//*[@id="firstHeading"]/i')),
+    new Field('directed_by', new XpathTextnode('//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a'))
 );
 
 $data = json_encode($html->parse(), JSON_PRETTY_PRINT);

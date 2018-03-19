@@ -28,7 +28,7 @@ namespace Ixno\WebCrawler\Query;
 use DOMXPath;
 use DOMNode;
 
-class XpathFields extends Query
+class XpathTextnodes extends Query
 {
     public function parse(DOMXPath $xpath, DOMNode $node = null)
     {

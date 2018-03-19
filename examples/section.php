@@ -29,7 +29,7 @@ include dirname(__FILE__).'/../autoload.php';
 
 use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Output\Group;
-use Ixno\WebCrawler\Query\XpathField;
+use Ixno\WebCrawler\Query\XpathTextnode;
 use Ixno\WebCrawler\Source\Url;
 use Ixno\WebCrawler\Source\XpathSection;
 
@@ -43,9 +43,9 @@ $html = new Url(
             'information',
             new Group(
                 'person',
-                new Field('directed_by', new XpathField('./tr[3]/td/a')),
-                new Field('produced_by', new XpathField('./tr[4]/td/a')),
-                new Field('screenplay_by', new XpathField('./tr[5]/td/div/ul/li/a'))
+                new Field('directed_by', new XpathTextnode('./tr[3]/td/a')),
+                new Field('produced_by', new XpathTextnode('./tr[4]/td/a')),
+                new Field('screenplay_by', new XpathTextnode('./tr[5]/td/div/ul/li/a'))
             )
         )
     )
