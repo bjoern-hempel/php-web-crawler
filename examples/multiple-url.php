@@ -49,7 +49,7 @@ $html = new File(
         new XpathSections(
             '/html/body/section[1]/div/div[2]/div/div/article',
             new Field(
-            'url',
+                'url',
                 new XpathTextnode(
                     './p[1]/a[1][span[contains(text(), \'Mehr\')]]/@href',
                     new Sprintf('https://presse.adac.de%s')
