@@ -23,30 +23,24 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
+include dirname(__FILE__).'/../autoload.php';
 
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
+use Ixno\WebCrawler\Output\Field;
+use Ixno\WebCrawler\Output\Group;
+use Ixno\WebCrawler\Value\XpathTextnode;
+use Ixno\WebCrawler\Source\Url;
 
-require_once $libDir.'/Output/Output.php';
-require_once $libDir.'/Output/Field.php';
-require_once $libDir.'/Output/Group.php';
+$url = 'https://presse.adac.de/meldungen/adac-ev/verkehr/hardware-nachruestungen-an-dieselfahrzeugen-sind-wirksam.html';
 
-require_once $libDir.'/Value/Value.php';
-require_once $libDir.'/Value/Text.php';
-require_once $libDir.'/Value/XpathTextnode.php';
-require_once $libDir.'/Value/XpathTextnodes.php';
+$html = new Url(
+    $url,
+    new Field('title', new XpathTextnode('/html/body/section[1]/div/div[2]/div/div/article/h1'))
+);
 
-require_once $libDir.'/Converter/Converter.php';
-require_once $libDir.'/Converter/DateParser.php';
-require_once $libDir.'/Converter/PregReplace.php';
-require_once $libDir.'/Converter/Sprintf.php';
-require_once $libDir.'/Converter/Trim.php';
+$data = json_encode($html->parse(), JSON_PRETTY_PRINT);
+
+print_r($data);
+
+echo "\n";

@@ -39,13 +39,13 @@ class XpathTextnode extends Value
         }
 
         if ($domNodeList->length === 1) {
-            return $this->applyConverters($domNodeList->item(0)->textContent);
+            return $this->applyChildren($domNodeList->item(0)->textContent, $xpath, $node);
         }
 
         $data = array();
 
         foreach ($domNodeList as $domNode) {
-            array_push($data, $this->applyConverters($domNode->textContent));
+            array_push($data, $this->applyChildren($domNode->textContent, $xpath, $node));
         }
 
         return $data;

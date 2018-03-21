@@ -29,6 +29,7 @@ use Ixno\WebCrawler\Converter\Converter;
 use Ixno\WebCrawler\Output\Output;
 use DOMXPath;
 use DOMNode;
+use Ixno\WebCrawler\Source\Source;
 
 abstract class Value
 {
@@ -39,6 +40,8 @@ abstract class Value
     protected $outputs = array();
 
     protected $converters = array();
+
+    protected $sources = array();
 
     public function __construct()
     {
@@ -64,13 +67,30 @@ abstract class Value
                 array_push($this->converters, $parameter);
                 continue;
             }
+
+            if ($parameter instanceof Source) {
+                array_push($this->sources, $parameter);
+                continue;
+            }
         }
     }
 
-    protected function applyConverters($value)
+    protected function applyChildren($value, DOMXPath $xpath, DOMNode $node = null)
     {
         foreach ($this->converters as $converter) {
             $value = $converter->getValue($value);
+        }
+
+        if (count($this->sources)) {
+            $data = array();
+
+            foreach ($this->sources as $source) {
+                $source->__construct($value);
+
+                $data = array_merge_recursive($data, $source->parse());
+            }
+
+            $value = $data;
         }
 
         return $value;

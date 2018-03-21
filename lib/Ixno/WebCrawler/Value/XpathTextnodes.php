@@ -41,7 +41,7 @@ class XpathTextnodes extends Value
         $data = array();
 
         foreach ($domNodeList as $domNode) {
-            array_push($data, $this->applyConverters($domNode->textContent));
+            array_push($data, $this->applyChildren($domNode->textContent, $xpath, $node));
         }
 
         return $data;
