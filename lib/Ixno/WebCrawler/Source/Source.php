@@ -48,7 +48,7 @@ abstract class Source
         foreach ($parameters as $parameter) {
 
             /* main config */
-            if (is_string($parameter) && $this->source === null) {
+            if (is_string($parameter)) {
                 $this->addSource($parameter);
                 continue;
             }

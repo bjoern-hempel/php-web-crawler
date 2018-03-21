@@ -41,8 +41,10 @@ use Ixno\WebCrawler\Source\XpathSections;
 $source = dirname(__FILE__).'/adac.html';
 $sourceSub = dirname(__FILE__).'/adac-sub.html';
 
-$html = new File(
-    $source,
+$url = 'https://presse.adac.de/meldungen/index.html';
+
+$html = new Url(
+    $url,
     new Field('title', new XpathTextnode('/html/body/section[1]/div/div[2]/div/div/div[1]/h1')),
     new Group(
         'hits',
@@ -59,8 +61,7 @@ $html = new File(
                 new XpathTextnode(
                     './p[1]/a[1][span[contains(text(), \'Mehr\')]]/@href',
                     new Sprintf('https://presse.adac.de%s'),
-                    new File(
-                        $sourceSub,
+                    new Url(
                         new XpathSection(
                             '/html/body/section[1]/div/div[2]/div/div/article',
                             new Field('title', new XpathTextnode('./h1[1]', new Trim())),
