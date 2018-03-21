@@ -87,7 +87,7 @@ abstract class Output
             return array($this->getName() => $data);
         }
 
-        return array($data);
+        return $data;
     }
 
     abstract public function parse(DOMXPath $xpath, DOMNode $node = null);
