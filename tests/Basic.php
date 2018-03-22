@@ -36,20 +36,25 @@ use PHPUnit\Framework\TestCase;
 
 class BasicTest extends TestCase
 {
-    public function test()
+    protected $version = '1.0.0';
+
+    protected function getData()
     {
         $file = dirname(__FILE__).'/../examples/simple.html';
 
-        $version = '1.0.0';
-
         $html = new File(
             $file,
-            new Field('version', new Text($version)),
+            new Field('version', new Text($this->version)),
             new Field('title', new XpathTextnode('//*[@id="firstHeading"]/i')),
             new Field('directed_by', new XpathTextnode('//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a'))
         );
 
-        $data = $html->parse();
+        return $html->parse();
+    }
+
+    public function test()
+    {
+        $data = $this->getData();
 
         $this->assertInternalType('array', $data);
 
@@ -59,7 +64,7 @@ class BasicTest extends TestCase
 
         $this->assertEquals(count($data), 3);
 
-        $this->assertEquals($data['version'], $version);
+        $this->assertEquals($data['version'], $this->version);
         $this->assertEquals($data['title'], 'Pirates of the Caribbean: The Curse of the Black Pearl');
         $this->assertEquals($data['directed_by'], 'Gore Verbinski');
     }
