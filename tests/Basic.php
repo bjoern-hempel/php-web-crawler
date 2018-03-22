@@ -38,9 +38,40 @@ class BasicTest extends TestCase
 {
     protected $version = '1.0.0';
 
-    protected function getData()
+    protected function getDataSimple()
     {
-        $file = dirname(__FILE__).'/../examples/simple.html';
+        $file = dirname(__FILE__).'/../examples/html/basic.html';
+
+        $html = new File(
+            $file,
+            new Field('version', new Text('1.0.0')),
+            new Field('title', new XpathTextnode('//h1')),
+            new Field('paragraph', new XpathTextnode('//p'))
+        );
+
+        return $html->parse();
+    }
+
+    public function testSimple()
+    {
+        $data = $this->getDataSimple();
+
+        $this->assertInternalType('array', $data);
+
+        $this->assertArrayHasKey('version', $data);
+        $this->assertArrayHasKey('title', $data);
+        $this->assertArrayHasKey('paragraph', $data);
+
+        $this->assertEquals(count($data), 3);
+
+        $this->assertEquals($data['version'], $this->version);
+        $this->assertEquals($data['title'], 'Test Title');
+        $this->assertEquals($data['paragraph'], 'Test Paragraph');
+    }
+
+    protected function getDataSimpleWikiPage()
+    {
+        $file = dirname(__FILE__).'/../examples/html/wiki-page.html';
 
         $html = new File(
             $file,
@@ -52,9 +83,9 @@ class BasicTest extends TestCase
         return $html->parse();
     }
 
-    public function test()
+    public function testSimpleWikiPage()
     {
-        $data = $this->getData();
+        $data = $this->getDataSimpleWikiPage();
 
         $this->assertInternalType('array', $data);
 

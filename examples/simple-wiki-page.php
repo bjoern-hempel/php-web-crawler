@@ -32,13 +32,13 @@ use Ixno\WebCrawler\Value\Text;
 use Ixno\WebCrawler\Value\XpathTextnode;
 use Ixno\WebCrawler\Source\File;
 
-$file = dirname(__FILE__).'/html/basic.html';
+$file = dirname(__FILE__).'/html/wiki-page.html';
 
 $html = new File(
     $file,
     new Field('version', new Text('1.0.0')),
-    new Field('title', new XpathTextnode('//h1')),
-    new Field('paragraph', new XpathTextnode('//p'))
+    new Field('title', new XpathTextnode('//*[@id="firstHeading"]/i')),
+    new Field('directed_by', new XpathTextnode('//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a'))
 );
 
 $data = json_encode($html->parse(), JSON_PRETTY_PRINT);
