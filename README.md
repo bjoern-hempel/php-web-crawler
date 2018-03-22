@@ -20,7 +20,7 @@ basic.html
 </html>
 ```
 
-simple.php
+[simple.php](examples/simple.php)
 
 ```php5
 <?php
