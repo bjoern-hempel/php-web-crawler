@@ -1,4 +1,5 @@
 <?php
+
 /*
  * MIT License
  *
@@ -31,18 +32,35 @@ use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Value\Text;
 use Ixno\WebCrawler\Value\XpathTextnode;
 use Ixno\WebCrawler\Source\File;
+use PHPUnit\Framework\TestCase;
 
-$file = dirname(__FILE__).'/simple.html';
+class BasicTest extends TestCase
+{
+    public function test()
+    {
+        $file = dirname(__FILE__).'/../examples/simple.html';
 
-$html = new File(
-    $file,
-    new Field('version', new Text('1.0.0')),
-    new Field('title', new XpathTextnode('//*[@id="firstHeading"]/i')),
-    new Field('directed_by', new XpathTextnode('//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a'))
-);
+        $version = '1.0.0';
 
-$data = json_encode($html->parse(), JSON_PRETTY_PRINT);
+        $html = new File(
+            $file,
+            new Field('version', new Text($version)),
+            new Field('title', new XpathTextnode('//*[@id="firstHeading"]/i')),
+            new Field('directed_by', new XpathTextnode('//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a'))
+        );
 
-print_r($data);
+        $data = $html->parse();
 
-echo "\n";
+        $this->assertInternalType('array', $data);
+
+        $this->assertArrayHasKey('version', $data);
+        $this->assertArrayHasKey('title', $data);
+        $this->assertArrayHasKey('directed_by', $data);
+
+        $this->assertEquals(count($data), 3);
+
+        $this->assertEquals($data['version'], $version);
+        $this->assertEquals($data['title'], 'Pirates of the Caribbean: The Curse of the Black Pearl');
+        $this->assertEquals($data['directed_by'], 'Gore Verbinski');
+    }
+}
