@@ -36,7 +36,7 @@ abstract class Output
 {
     protected $name = null;
 
-    protected $queries = array();
+    protected $values = array();
 
     protected $outputs = array();
 
@@ -55,7 +55,7 @@ abstract class Output
             }
 
             if ($parameter instanceof Value) {
-                array_push($this->queries, $parameter);
+                array_push($this->values, $parameter);
                 continue;
             }
 

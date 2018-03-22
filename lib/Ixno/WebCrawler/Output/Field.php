@@ -32,18 +32,18 @@ class Field extends Output
 {
     public function parse(DOMXPath $xpath, DOMNode $node = null)
     {
-        if (count($this->queries) === 0) {
+        if (count($this->values) === 0) {
             return $this->getData(null);
         }
 
-        if (count($this->queries) === 1) {
-            return $this->getData($this->queries[0]->parse($xpath, $node));
+        if (count($this->values) === 1) {
+            return $this->getData($this->values[0]->parse($xpath, $node));
         }
 
         $data = array();
 
-        foreach ($this->queries as $query) {
-            array_push($data, $query->parse($xpath, $node));
+        foreach ($this->values as $value) {
+            array_push($data, $value->parse($xpath, $node));
         }
 
         return $this->getData($data);
