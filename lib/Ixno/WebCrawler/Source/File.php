@@ -25,24 +25,10 @@
 
 namespace Ixno\WebCrawler\Source;
 
-class Url extends Source
+class File extends Source
 {
     public function addSource($source)
     {
-        $timeout = 5;
-
-        $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36';
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $source);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-
-        $response = curl_exec($ch);
-
-        curl_close($ch);
-
-        $this->source = $response;
+        $this->source = file_get_contents($source);
     }
 }

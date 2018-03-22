@@ -25,24 +25,24 @@
 
 namespace Ixno\WebCrawler\Source;
 
-class Url extends Source
+use DOMXPath;
+use DOMNode;
+
+class XpathSection extends Source
 {
+    public function parse(DOMXPath $xpath = null, DOMNode $node = null, Array $data = array())
+    {
+        $nodeList = $xpath->query($this->source, $node);
+
+        if ($nodeList->length > 0) {
+            $node = $nodeList->item(0);
+        }
+
+        return $this->doParse($xpath, $node, $data);
+    }
+
     public function addSource($source)
     {
-        $timeout = 5;
-
-        $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36';
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $source);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-
-        $response = curl_exec($ch);
-
-        curl_close($ch);
-
-        $this->source = $response;
+        $this->source = $source;
     }
 }

@@ -23,26 +23,20 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Source;
+namespace Ixno\WebCrawler\Converter;
 
-class Url extends Source
+class Sprintf implements Converter
 {
-    public function addSource($source)
+    protected $wrapper = '%s';
+
+    public function __construct($wrapper = '%s')
     {
-        $timeout = 5;
+        $this->wrapper = $wrapper;
+    }
 
-        $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36';
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $source);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-
-        $response = curl_exec($ch);
-
-        curl_close($ch);
-
-        $this->source = $response;
+    public function getValue($value)
+    {
+        return sprintf($this->wrapper, $value);
     }
 }
+

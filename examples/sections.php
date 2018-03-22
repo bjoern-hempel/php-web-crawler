@@ -23,26 +23,33 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Source;
+namespace Ixno\WebCrawler;
 
-class Url extends Source
-{
-    public function addSource($source)
-    {
-        $timeout = 5;
+include dirname(__FILE__).'/../autoload.php';
 
-        $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36';
+use Ixno\WebCrawler\Output\Field;
+use Ixno\WebCrawler\Output\Group;
+use Ixno\WebCrawler\Value\XpathTextnode;
+use Ixno\WebCrawler\Source\Url;
+use Ixno\WebCrawler\Source\XpathSections;
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $source);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+$url = 'https://en.wikipedia.org/w/index.php?title=Special:Search&profile=advanced&search=Pirates+of+the+Caribbean+movie&searchToken=1r1zctaiucfw60o9mwdgr5nku';
 
-        $response = curl_exec($ch);
+$html = new Url(
+    $url,
+    new Field('title', new XpathTextnode('//*[@id="firstHeading"]')),
+    new Group(
+        'hits',
+        new XpathSections(
+            '//*[@id="mw-content-text"]/div/ul/li',
+            new Field('title', new XpathTextnode('./div[1]/a')),
+            new Field('link', new XpathTextnode('./div[1]/a/@href'))
+        )
+    )
+);
 
-        curl_close($ch);
+$data = json_encode($html->parse(), JSON_PRETTY_PRINT);
 
-        $this->source = $response;
-    }
-}
+print_r($data);
+
+echo "\n";

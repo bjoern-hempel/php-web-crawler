@@ -23,26 +23,31 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Source;
+namespace Ixno\WebCrawler\Value;
 
-class Url extends Source
+use DOMXPath;
+use DOMNode;
+
+class XpathTextnode extends Value
 {
-    public function addSource($source)
+    public function parse(DOMXPath $xpath, DOMNode $node = null)
     {
-        $timeout = 5;
+        $domNodeList = $xpath->query($this->value, $node);
 
-        $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36';
+        if ($domNodeList->length === 0) {
+            return null;
+        }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $source);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+        if ($domNodeList->length === 1) {
+            return $this->applyChildren($domNodeList->item(0)->textContent, $xpath, $node);
+        }
 
-        $response = curl_exec($ch);
+        $data = array();
 
-        curl_close($ch);
+        foreach ($domNodeList as $domNode) {
+            array_push($data, $this->applyChildren($domNode->textContent, $xpath, $node));
+        }
 
-        $this->source = $response;
+        return $data;
     }
 }

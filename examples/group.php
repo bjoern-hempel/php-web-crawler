@@ -23,26 +23,28 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Source;
+namespace Ixno\WebCrawler;
 
-class Url extends Source
-{
-    public function addSource($source)
-    {
-        $timeout = 5;
+include dirname(__FILE__).'/../autoload.php';
 
-        $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36';
+use Ixno\WebCrawler\Output\Field;
+use Ixno\WebCrawler\Output\Group;
+use Ixno\WebCrawler\Value\XpathTextnode;
+use Ixno\WebCrawler\Source\Url;
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $source);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+$url = 'https://en.wikipedia.org/wiki/Pirates_of_the_Caribbean:_The_Curse_of_the_Black_Pearl';
 
-        $response = curl_exec($ch);
+$html = new Url(
+    $url,
+    new Group(
+        'group',
+        new Field('title', new XpathTextnode('//*[@id="firstHeading"]/i')),
+        new Field('directed_by', new XpathTextnode('//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a'))
+    )
+);
 
-        curl_close($ch);
+$data = json_encode($html->parse(), JSON_PRETTY_PRINT);
 
-        $this->source = $response;
-    }
-}
+print_r($data);
+
+echo "\n";

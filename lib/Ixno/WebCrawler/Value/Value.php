@@ -23,21 +23,23 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Source;
+namespace Ixno\WebCrawler\Value;
 
-use DOMDocument;
+use Ixno\WebCrawler\Converter\Converter;
+use Ixno\WebCrawler\Output\Output;
 use DOMXPath;
 use DOMNode;
+use Ixno\WebCrawler\Source\Source;
 
-use Ixno\WebCrawler\Output\Field;
-use Ixno\WebCrawler\Output\Output;
-use Ixno\WebCrawler\Value\Value;
-
-abstract class Source
+abstract class Value
 {
-    protected $source = null;
+    protected $value = null;
+
+    protected $values = array();
 
     protected $outputs = array();
+
+    protected $converters = array();
 
     protected $sources = array();
 
@@ -46,22 +48,23 @@ abstract class Source
         $parameters = func_get_args();
 
         foreach ($parameters as $parameter) {
-
-            /* main config */
             if (is_string($parameter)) {
-                $this->addSource($parameter);
+                $this->value = $parameter;
                 continue;
             }
 
-            /* add Output object */
+            if ($parameter instanceof Value) {
+                array_push($this->values, $parameter);
+                continue;
+            }
+
             if ($parameter instanceof Output) {
                 array_push($this->outputs, $parameter);
                 continue;
             }
 
-            /* convert Value object to Output object */
-            if ($parameter instanceof Value) {
-                array_push($this->outputs, new Field($parameter));
+            if ($parameter instanceof Converter) {
+                array_push($this->converters, $parameter);
                 continue;
             }
 
@@ -72,38 +75,31 @@ abstract class Source
         }
     }
 
-    protected function getDOMXPathFromSource()
+    protected function applyChildren($value, DOMXPath $xpath, DOMNode $node = null)
     {
-        $doc = new DOMDocument();
-
-        libxml_use_internal_errors(true);
-        $doc->loadHTML($this->source);
-        libxml_clear_errors();
-
-        return new DOMXpath($doc);
-    }
-
-    protected function doParse(DOMXPath $xpath, DOMNode $node = null, Array $data = array())
-    {
-        $collectedData = array();
-
-        foreach ($this->outputs as $output) {
-            $collectedData = array_merge_recursive($collectedData, $output->parse($xpath, $node));
+        foreach ($this->converters as $converter) {
+            $value = $converter->getValue($value);
         }
 
-        foreach ($this->sources as $source) {
-            $collectedData = array_merge_recursive($collectedData, $source->parse($xpath, $node, $data));
+        if (count($this->sources)) {
+            $data = array();
+
+            foreach ($this->sources as $source) {
+                $source->__construct($value);
+
+                $data = array_merge_recursive($data, $source->parse());
+            }
+
+            $value = $data;
         }
 
-        return $collectedData;
+        return $value;
     }
 
-    public function parse(DOMXPath $xpath = null, DOMNode $node = null, Array $data = array())
+    public function __toString()
     {
-        $xpath = $this->getDOMXPathFromSource();
-
-        return $this->doParse($xpath, $node, $data);
+        return $this->value;
     }
 
-    abstract public function addSource($source);
+    abstract public function parse(DOMXPath $xpath, DOMNode $node = null);
 }

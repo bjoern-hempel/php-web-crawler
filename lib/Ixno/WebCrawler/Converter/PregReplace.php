@@ -23,26 +23,24 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Source;
+namespace Ixno\WebCrawler\Converter;
 
-class Url extends Source
+class PregReplace implements Converter
 {
-    public function addSource($source)
+    protected $pattern = null;
+
+    protected $replacement = '';
+
+    public function __construct($pattern, $replacement = '')
     {
-        $timeout = 5;
+        $this->pattern = $pattern;
 
-        $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36';
+        $this->replacement = $replacement;
+    }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $source);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
-
-        $response = curl_exec($ch);
-
-        curl_close($ch);
-
-        $this->source = $response;
+    public function getValue($value)
+    {
+        return preg_replace($this->pattern, $this->replacement, $value);
     }
 }
+

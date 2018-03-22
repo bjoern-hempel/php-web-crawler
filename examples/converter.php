@@ -23,26 +23,48 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler\Source;
+namespace Ixno\WebCrawler;
 
-class Url extends Source
-{
-    public function addSource($source)
-    {
-        $timeout = 5;
+include dirname(__FILE__).'/../autoload.php';
 
-        $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36';
+use Ixno\WebCrawler\Converter\DateParser;
+use Ixno\WebCrawler\Converter\PregReplace;
+use Ixno\WebCrawler\Converter\Trim;
+use Ixno\WebCrawler\Output\Field;
+use Ixno\WebCrawler\Value\Text;
+use Ixno\WebCrawler\Value\XpathTextnode;
+use Ixno\WebCrawler\Source\File;
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $source);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+$file = dirname(__FILE__).'/converter.html';
 
-        $response = curl_exec($ch);
+$html = new File(
+    $file,
+    new Field(
+        'version',
+        new Text(
+            '1.0'
+        )
+    ),
+    new Field(
+        'title',
+        new XpathTextnode(
+            '//*[@id="title-overview-widget"]/div[2]/div[2]/div/div[2]/div[2]/h1',
+            new Trim()
+        )
+    ),
+    new Field(
+        'date',
+        new XpathTextnode(
+            '//*[@id="title-overview-widget"]/div[2]/div[2]/div/div[2]/div[2]/div[2]/a[4]',
+            new Trim(),
+            new PregReplace('~ \([^\(]+\)~', ''),
+            new DateParser('d M Y H:i:s', '%s 12:00:00')
+        )
+    )
+);
 
-        curl_close($ch);
+$data = json_encode($html->parse(), JSON_PRETTY_PRINT);
 
-        $this->source = $response;
-    }
-}
+print_r($data);
+
+echo "\n";
