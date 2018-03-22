@@ -23,8 +23,6 @@
  * SOFTWARE.
  */
 
-namespace Ixno\WebCrawler;
-
 include dirname(__FILE__).'/../autoload.php';
 
 use Ixno\WebCrawler\Output\Field;
