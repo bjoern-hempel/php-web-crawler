@@ -11,12 +11,12 @@ basic.html
 ```html
 <html>
     <head>
-		<title>Test Page</title>
-	</head>
+        <title>Test Page</title>
+    </head>
     <body>
-		<h1>Test Title</h1>
-		<p>Test Paragraph</p>
-	</body>
+        <h1>Test Title</h1>
+        <p>Test Paragraph</p>
+    </body>
 </html>
 ```
 
