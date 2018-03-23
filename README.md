@@ -6,7 +6,7 @@ This php class allows you to crawl recursively a given webpage (or a given html 
 
 ### Basic usage (simple html page)
 
-basic.html
+[basic.html](examples/html/basic.html)
 
 ```html
 <html>
@@ -20,7 +20,7 @@ basic.html
 </html>
 ```
 
-simple.php
+[simple.php](examples/simple.php)
 
 ```php5
 <?php
@@ -57,3 +57,7 @@ It returns:
     "paragraph": "Test Paragraph"
 }
 ```
+
+### More examples
+
+* [simple-wiki-page.php](examples/simple-wiki-page.php)
