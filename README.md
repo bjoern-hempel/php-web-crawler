@@ -6,7 +6,7 @@ This php class allows you to crawl recursively a given webpage (or a given html 
 
 ### Basic usage (simple html page)
 
-basic.html
+[basic.html](examples/html/basic.html)
 
 ```html
 <html>
