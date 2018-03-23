@@ -75,9 +75,13 @@ It returns:
 }
 ```
 
-### More examples
+#### More examples
 
 * [examples/simple-wiki-page.php](examples/simple-wiki-page.php)
+
+### Complex examples
+
+TODO...
 
 ## Running the tests
 
