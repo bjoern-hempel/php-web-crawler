@@ -57,3 +57,7 @@ It returns:
     "paragraph": "Test Paragraph"
 }
 ```
+
+### More examples
+
+* [simple-wiki-page.php](examples/simple-wiki-page.php)
