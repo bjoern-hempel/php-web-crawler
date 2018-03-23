@@ -2,13 +2,13 @@
 
 This php class allows you to crawl recursively a given webpage (or a given html file) and collect some data from it. Simply define the url (or a html file) and a set of xpath expressions which should map with the output data object. The final representation will be a php array which can be easily converted into the json format for further processing.
 
-## Installation
+## 0. Installation
 
 ```bash
 user$ git clone git@github.com:bjoern-hempel/php-web-crawler.git .
 ```
 
-## Execute the examples
+## 1. Execute the examples
 
 ```bash
 user$ php examples/simple.php 
@@ -19,9 +19,9 @@ user$ php examples/simple.php
 }
 ```
 
-## How to use
+## 2. How to use
 
-### Basic usage (simple html page)
+### 2.1 Basic usage (simple html page)
 
 [basic.html](examples/html/basic.html)
 
@@ -75,23 +75,23 @@ It returns:
 }
 ```
 
-#### More examples
+#### 2.2 More examples
 
 * [examples/simple-wiki-page.php](examples/simple-wiki-page.php)
 
-### Complex examples
+### 2.2 Complex examples
 
 TODO...
 
-### Converter
+### 2.3 Converter
 
 TODO...
 
-### Filters
+### 2.4 Filters
 
 TODO...
 
-## Running the tests
+## 3. Running the tests
 
 ```bash
 user$ phpunit tests/Basic.php 
@@ -104,14 +104,14 @@ Time: 126 ms, Memory: 8.00MB
 OK (2 tests, 16 assertions)
 ```
 
-## Authors
+## A. Authors
 
 * **Björn Hempel** - *Initial work* - [Björn Hempel](https://github.com/bjoern-hempel)
 
-## License
+## B. License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-## Closing words
+## C. Closing words
 
 Have fun! :)
