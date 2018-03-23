@@ -27,7 +27,7 @@ user$ php examples/simple.php
 
 ## 2. How to use
 
-### 2.1 Basic usage (simple html page)
+### 2.1 Basic usage [simple.php](examples/simple.php) (simple html page)
 
 [basic.html](examples/html/basic.html)
 
