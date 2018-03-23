@@ -83,6 +83,14 @@ It returns:
 
 TODO...
 
+### Converter
+
+TODO...
+
+### Filters
+
+TODO...
+
 ## Running the tests
 
 ```bash
