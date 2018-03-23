@@ -84,6 +84,11 @@ It returns:
 #### 2.2 More examples
 
 * [examples/simple-wiki-page.php](examples/simple-wiki-page.php)
+* [examples/group.php](examples/group.php)
+* [examples/section.php](examples/section.php)
+* [examples/sections.php](examples/sections.php)
+* [examples/url.php](examples/url.php)
+
 
 ### 2.2 Complex examples
 
