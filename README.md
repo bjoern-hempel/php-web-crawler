@@ -2,6 +2,17 @@
 
 This php class allows you to crawl recursively a given webpage (or a given html file) and collect some data from it. Simply define the url (or a html file) and a set of xpath expressions which should map with the output data object. The final representation will be a php array which can be easily converted into the json format for further processing.
 
+## Execute the examples
+
+```bash
+user$ php examples/simple.php 
+{
+    "version": "1.0.0",
+    "title": "Test Title",
+    "paragraph": "Test Paragraph"
+}
+```
+
 ## How to use
 
 ### Basic usage (simple html page)
@@ -60,4 +71,4 @@ It returns:
 
 ### More examples
 
-* [simple-wiki-page.php](examples/simple-wiki-page.php)
+* [examples/simple-wiki-page.php](examples/simple-wiki-page.php)
