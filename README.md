@@ -78,3 +78,16 @@ It returns:
 ### More examples
 
 * [examples/simple-wiki-page.php](examples/simple-wiki-page.php)
+
+## Running the tests
+
+```bash
+user$ phpunit tests/Basic.php 
+PHPUnit 7.0.2 by Sebastian Bergmann and contributors.
+
+..                                                                  2 / 2 (100%)
+
+Time: 126 ms, Memory: 8.00MB
+
+OK (2 tests, 16 assertions)
+```
