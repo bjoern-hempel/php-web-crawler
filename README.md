@@ -95,3 +95,11 @@ Time: 126 ms, Memory: 8.00MB
 
 OK (2 tests, 16 assertions)
 ```
+
+## Authors
+
+* **Björn Hempel** - *Initial work* - [Björn Hempel](https://github.com/bjoern-hempel)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
