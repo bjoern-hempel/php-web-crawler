@@ -34,7 +34,7 @@ getNextTagFromGivenPath()
     local position=${2:-2}
 
     local currentTag=$(getCurrentTagFromGivenPath "$1")
-    local  searchReg="([v]?)([0-9]+)\.([0-9]+)\.([0-9]+)"
+    local  searchReg="^([v]?)([0-9]+)\.([0-9]+)\.([0-9]+)"
 
     if ! [[ "$currentTag" =~ $searchReg ]]; then
         >&2 echo "Unable to parse the current version \"$currentTag\"."
