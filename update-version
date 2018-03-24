@@ -34,16 +34,18 @@ getNextTagFromGivenPath()
     local position=${2:-2}
 
     local currentTag=$(getCurrentTagFromGivenPath "$1")
-    local  searchReg="([0-9]+)\.([0-9]+)\.([0-9]+)$"
+    local  searchReg="([v]?)([0-9]+)\.([0-9]+)\.([0-9]+)"
 
     if ! [[ "$currentTag" =~ $searchReg ]]; then
         >&2 echo "Unable to parse the current version \"$currentTag\"."
         return 1
     fi
 
-    local major=${BASH_REMATCH[1]}
-    local minor=${BASH_REMATCH[2]}
-    local revision=${BASH_REMATCH[3]}
+    currentTag="${BASH_REMATCH[1]}${BASH_REMATCH[2]}.${BASH_REMATCH[3]}.${BASH_REMATCH[4]}"
+
+    local major=${BASH_REMATCH[2]}
+    local minor=${BASH_REMATCH[3]}
+    local revision=${BASH_REMATCH[4]}
     local version="$major.$minor.$revision"
     local prefix=$(echo "$currentTag" | sed "s/$version$//")
 
