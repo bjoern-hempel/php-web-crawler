@@ -119,7 +119,7 @@ OK (2 tests, 16 assertions)
 
 Make some changes to your `composer.json`:
 
-```json
+```javascript
 "autoload": {
     "psr-0": {
         ...
