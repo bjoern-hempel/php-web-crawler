@@ -115,6 +115,55 @@ Time: 126 ms, Memory: 8.00MB
 OK (2 tests, 16 assertions)
 ```
 
+## Usage with composer (manual installation)
+
+Make some changes to your `composer.json`:
+
+```json
+"autoload": {
+    "psr-0": {
+        ...
+        "Ixno\\WebCrawler\\":"vendor/ixno/webcrawler/",
+        ...
+    }
+},
+```
+
+Add this project to your `vendor` directory:
+
+```bash
+user$ cd /path/to/root/of/project
+user$ mkdir vendor/ixno/webcrawler && cd vendor/ixno/webcrawler
+user$ git clone git@github.com:bjoern-hempel/php-web-crawler.git . && cd ../../..
+```
+
+Call the `composer` to create the composer autoloading mappings:
+
+```bash
+user$ composer.phar dumpautoload -o
+```
+
+Check the result:
+
+```bash
+user$ grep -r Ixno vendor/composer/.
+```
+
+You will something like the following lines:
+
+```php
+vendor/composer/./autoload_classmap.php:    'Ixno\\WebCrawler\\Converter\\Converter' => $vendorDir . '/ixno/webcrawler/lib/Ixno/WebCrawler/Converter/Converter.php',
+vendor/composer/./autoload_classmap.php:    'Ixno\\WebCrawler\\Converter\\DateParser' => $vendorDir . '/ixno/webcrawler/lib/Ixno/WebCrawler/Converter/DateParser.php',
+vendor/composer/./autoload_classmap.php:    'Ixno\\WebCrawler\\CrawlRule' => $vendorDir . '/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php',
+vendor/composer/./autoload_classmap.php:    'Ixno\\WebCrawler\\Crawler' => $vendorDir . '/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php',
+vendor/composer/./autoload_classmap.php:    'Ixno\\WebCrawler\\Page' => $vendorDir . '/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php',
+vendor/composer/./autoload_classmap.php:    'Ixno\\WebCrawler\\PageGroup' => $vendorDir . '/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php',
+vendor/composer/./autoload_classmap.php:    'Ixno\\WebCrawler\\PageList' => $vendorDir . '/ixno/webcrawler/lib/Ixno/WebCrawler/Crawler.php',
+...
+```
+
+Now you can simply use all classes without including the source files.
+
 ## A. Authors
 
 * **Björn Hempel** - *Initial work* - [Björn Hempel](https://github.com/bjoern-hempel)
