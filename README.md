@@ -115,7 +115,7 @@ Time: 126 ms, Memory: 8.00MB
 OK (2 tests, 16 assertions)
 ```
 
-## Composer autoloader (manual installation)
+## Using `composer`'s autoload (manual installation)
 
 Using the autoloader function of the `composer` it is possible to use this classes without including the source files.
 
