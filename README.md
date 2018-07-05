@@ -115,7 +115,9 @@ Time: 126 ms, Memory: 8.00MB
 OK (2 tests, 16 assertions)
 ```
 
-## Usage with composer (manual installation)
+## Composer autoloader (manual installation)
+
+Using the autoloader function of the `composer` it is possible to use this classes without including the source files.
 
 Make some changes to your `composer.json`:
 
