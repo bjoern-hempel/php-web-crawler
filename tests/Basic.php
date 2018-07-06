@@ -44,7 +44,7 @@ class BasicTest extends TestCase
 
         $html = new File(
             $file,
-            new Field('version', new Text('1.0.0')),
+            new Field('version', new Text($this->version)),
             new Field('title', new XpathTextnode('//h1')),
             new Field('paragraph', new XpathTextnode('//p'))
         );
