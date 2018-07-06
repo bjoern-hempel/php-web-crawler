@@ -27,53 +27,15 @@ namespace Ixno\WebCrawler;
 
 include dirname(__FILE__).'/../autoload.php';
 
-use Ixno\WebCrawler\Converter\DateParser;
 use Ixno\WebCrawler\Converter\Sprintf;
 use Ixno\WebCrawler\Converter\Trim;
 use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Output\Group;
-use Ixno\WebCrawler\Source\Url;
-use Ixno\WebCrawler\Source\XpathSection;
 use Ixno\WebCrawler\Value\XpathTextnode;
 use Ixno\WebCrawler\Source\File;
 use Ixno\WebCrawler\Source\XpathSections;
 
-//$source = dirname(__FILE__).'/html/praesidium.html';
-//$url = 'https://www.adac.de/der-adac/verein/management/praesidium/';
-//
-//$html = new File(
-//    $source,
-//    new Field('title', new XpathTextnode('//*[@id="l_main_content"]/h1')),
-//    new Group(
-//        'hits',
-//        new XpathSections(
-//            '//*[@id="l_main_content"]/div/div[3]/div/div[1]/figure',
-//            new Field('name', new XpathTextnode('./figcaption/div/div[1]', new Trim())),
-//            new Field('position', new XpathTextnode('./figcaption/div/div[2]', new Trim())),
-//            new Field('image', new XpathTextnode('./img/@src', new Sprintf('https://www.adac.de%s')))
-//        )
-//    )
-//);
-
-//$source = dirname(__FILE__).'/html/verwaltungsrat.html';
-//$url = 'https://www.adac.de/der-adac/verein/management/verwaltungsrat/';
-//
-//$html = new File(
-//    $source,
-//    new Field('title', new XpathTextnode('//*[@id="l_main_content"]/h1')),
-//    new Group(
-//        'hits',
-//        new XpathSections(
-//            '//*[@id="l_main_content"]/div/div[3]/div/div[1]/figure',
-//            new Field('name', new XpathTextnode('./figcaption/div/div[2]', new Trim())),
-//            new Field('area', new XpathTextnode('./figcaption/div/div[1]', new Trim())),
-//            new Field('image', new XpathTextnode('./img/@src', new Sprintf('https://www.adac.de%s')))
-//        )
-//    )
-//);
-
 $source = dirname(__FILE__).'/html/geschaeftsfuehrung.html';
-$url = 'https://www.adac.de/der-adac/verein/management/geschaeftsfuehrung/';
 
 $html = new File(
     $source,
@@ -84,7 +46,6 @@ $html = new File(
             '//*[@id="l_main_content"]/div[contains(concat(" ", normalize-space(@class), " "), " cf ")]',
             new Field('name', new XpathTextnode('./div/div[2]/p', new Trim())),
             new Field('area', new XpathTextnode('./h2', new Trim())),
-            //*[@id="l_main_content"]/div[2]/div/div[1]/figure/div/picture/img
             new Field('image', new XpathTextnode('./div/div[1]/figure/div/picture/img/@data-src', new Sprintf('https://www.adac.de%s')))
         )
     )
