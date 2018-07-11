@@ -45,7 +45,7 @@ class XpathOuterhtml extends Value
         $data = array();
 
         foreach ($domNodeList as $domNode) {
-            array_push($data, $this->applyChildren($domNodeList->item(0)->ownerDocument->saveHTML($domNodeList->item(0)), $xpath, $node));
+            array_push($data, $this->applyChildren($domNode->ownerDocument->saveHTML($domNode), $xpath, $node));
         }
 
         return $data;

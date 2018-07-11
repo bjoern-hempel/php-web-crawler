@@ -52,7 +52,13 @@ class XpathInnerhtml extends Value
         $data = array();
 
         foreach ($domNodeList as $domNode) {
-            array_push($data, $this->applyChildren($domNodeList->item(0)->ownerDocument->saveHTML($domNodeList->item(0)), $xpath, $node));
+            $innerhtml = '';
+
+            foreach ($domNode->childNodes as $child) {
+                $innerhtml .= $domNode->ownerDocument->saveHTML($child);
+            }
+
+            array_push($data, $this->applyChildren($innerhtml, $xpath, $node));
         }
 
         return $data;
