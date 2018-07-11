@@ -23,32 +23,38 @@
  * SOFTWARE.
  */
 
-/* build lib root dir */
-$libDir = dirname(__FILE__).'/lib/Ixno/WebCrawler';
+namespace Ixno\WebCrawler\Value;
 
-/* require all needed classes */
-require_once $libDir.'/Crawler.php';
+use DOMXPath;
+use DOMNode;
 
-require_once $libDir.'/Source/Source.php';
-require_once $libDir.'/Source/File.php';
-require_once $libDir.'/Source/Html.php';
-require_once $libDir.'/Source/Url.php';
-require_once $libDir.'/Source/XpathSection.php';
-require_once $libDir.'/Source/XpathSections.php';
+class XpathInnerhtml extends Value
+{
+    public function parse(DOMXPath $xpath, DOMNode $node = null)
+    {
+        $domNodeList = $xpath->query($this->value, $node);
 
-require_once $libDir.'/Output/Output.php';
-require_once $libDir.'/Output/Field.php';
-require_once $libDir.'/Output/Group.php';
+        if ($domNodeList->length === 0) {
+            return null;
+        }
 
-require_once $libDir.'/Value/Value.php';
-require_once $libDir.'/Value/Text.php';
-require_once $libDir.'/Value/XpathTextnode.php';
-require_once $libDir.'/Value/XpathTextnodes.php';
-require_once $libDir.'/Value/XpathOuterhtml.php';
-require_once $libDir.'/Value/XpathInnerhtml.php';
 
-require_once $libDir.'/Converter/Converter.php';
-require_once $libDir.'/Converter/DateParser.php';
-require_once $libDir.'/Converter/PregReplace.php';
-require_once $libDir.'/Converter/Sprintf.php';
-require_once $libDir.'/Converter/Trim.php';
+        if ($domNodeList->length === 1) {
+            $innerhtml = '';
+
+            foreach ($domNodeList->item(0)->childNodes as $child) {
+                $innerhtml .= $domNodeList->item(0)->ownerDocument->saveHTML($child);
+            }
+
+            return $this->applyChildren($innerhtml, $xpath, $node);
+        }
+
+        $data = array();
+
+        foreach ($domNodeList as $domNode) {
+            array_push($data, $this->applyChildren($domNodeList->item(0)->ownerDocument->saveHTML($domNodeList->item(0)), $xpath, $node));
+        }
+
+        return $data;
+    }
+}
