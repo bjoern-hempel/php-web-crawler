@@ -44,6 +44,7 @@ require_once $libDir.'/Value/Value.php';
 require_once $libDir.'/Value/Text.php';
 require_once $libDir.'/Value/XpathTextnode.php';
 require_once $libDir.'/Value/XpathTextnodes.php';
+require_once $libDir.'/Value/XpathOuterhtml.php';
 
 require_once $libDir.'/Converter/Converter.php';
 require_once $libDir.'/Converter/DateParser.php';
