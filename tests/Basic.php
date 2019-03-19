@@ -56,7 +56,7 @@ class BasicTest extends TestCase
     {
         $data = $this->getDataSimple();
 
-        $this->assertInternalType('array', $data);
+        $this->assertIsArray($data);
 
         $this->assertArrayHasKey('version', $data);
         $this->assertArrayHasKey('title', $data);
@@ -87,7 +87,7 @@ class BasicTest extends TestCase
     {
         $data = $this->getDataSimpleWikiPage();
 
-        $this->assertInternalType('array', $data);
+        $this->assertIsArray($data);
 
         $this->assertArrayHasKey('version', $data);
         $this->assertArrayHasKey('title', $data);
