@@ -31,72 +31,115 @@ include dirname(__FILE__).'/../autoload.php';
 use Ixno\WebCrawler\Output\Field;
 use Ixno\WebCrawler\Value\Text;
 use Ixno\WebCrawler\Value\XpathTextnode;
-use Ixno\WebCrawler\Source\File;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 class BasicTest extends TestCase
 {
     protected $version = '1.0.0';
 
-    protected function getDataSimple()
+    /**
+     * Helper function: Parse given html file and return the data array.
+     *
+     * @param $path
+     * @param array $fields
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    protected function parseHtml($path, $fields = array())
     {
-        $file = dirname(__FILE__).'/../examples/html/basic.html';
+        $file = dirname(__FILE__).$path;
 
-        $html = new File(
-            $file,
-            new Field('version', new Text($this->version)),
-            new Field('title', new XpathTextnode('//h1')),
-            new Field('paragraph', new XpathTextnode('//p'))
+        $reflector = new ReflectionClass('Ixno\WebCrawler\Source\File');
+
+        $parameter = array_merge(
+            array(
+                $file,
+                new Field('version', new Text($this->version)),
+            ),
+            $fields
         );
+
+        $html = $reflector->newInstanceArgs($parameter);
 
         return $html->parse();
     }
 
+    /**
+     * Test: Parse basic html file.
+     */
     public function testSimple()
     {
-        $data = $this->getDataSimple();
+        /* Arrange */
+        $path = '/../examples/html/basic.html';
+        $fields = array(
+            new Field('title', new XpathTextnode('//h1')),
+            new Field('paragraph', new XpathTextnode('//p'))
+        );
 
+        /* Act */
+        $data = $this->parseHtml($path, $fields);
+
+        /* Assert */
         $this->assertIsArray($data);
-
         $this->assertArrayHasKey('version', $data);
         $this->assertArrayHasKey('title', $data);
         $this->assertArrayHasKey('paragraph', $data);
-
         $this->assertEquals(count($data), 3);
-
         $this->assertEquals($data['version'], $this->version);
         $this->assertEquals($data['title'], 'Test Title');
         $this->assertEquals($data['paragraph'], 'Test Paragraph');
     }
 
-    protected function getDataSimpleWikiPage()
+    /**
+     * Test: Parse wiki page.
+     */
+    public function testSimpleWikiPage()
     {
-        $file = dirname(__FILE__).'/../examples/html/wiki-page.html';
-
-        $html = new File(
-            $file,
-            new Field('version', new Text($this->version)),
+        /* Arrange */
+        $path = '/../examples/html/wiki-page.html';
+        $fields = array(
             new Field('title', new XpathTextnode('//*[@id="firstHeading"]/i')),
             new Field('directed_by', new XpathTextnode('//*[@id="mw-content-text"]/div/table[1]//tr[3]/td/a'))
         );
 
-        return $html->parse();
-    }
+        /* Act */
+        $data = $this->parseHtml($path, $fields);
 
-    public function testSimpleWikiPage()
-    {
-        $data = $this->getDataSimpleWikiPage();
-
+        /* Assert */
         $this->assertIsArray($data);
-
         $this->assertArrayHasKey('version', $data);
         $this->assertArrayHasKey('title', $data);
         $this->assertArrayHasKey('directed_by', $data);
-
         $this->assertEquals(count($data), 3);
-
         $this->assertEquals($data['version'], $this->version);
         $this->assertEquals($data['title'], 'Pirates of the Caribbean: The Curse of the Black Pearl');
         $this->assertEquals($data['directed_by'], 'Gore Verbinski');
+    }
+
+    /**
+     * Test: Parse another html page.
+     */
+    public function testAnotherPage()
+    {
+        /* Arrange */
+        $path = '/../examples/html/praesidium.html';
+        $fields = array(
+            new Field('title', new XpathTextnode('//html/head/title')),
+            new Field('cookies', new XpathTextnode('//html/body/div[1]/div/div[1]'))
+        );
+
+        /* Act */
+        $data = $this->parseHtml($path, $fields);
+
+        /* Assert */
+        $this->assertIsArray($data);
+        $this->assertArrayHasKey('version', $data);
+        $this->assertArrayHasKey('title', $data);
+        $this->assertArrayHasKey('cookies', $data);
+        $this->assertEquals(count($data), 3);
+        $this->assertEquals($data['version'], $this->version);
+        $this->assertEquals($data['title'], 'Präsidium | ADAC e.V.');
+        $this->assertEquals(trim($data['cookies']), 'Wir verwenden Cookies. Mit der weiteren Nutzung unserer Seite stimmen Sie dem zu. Details und Widerspruchsmöglichkeiten finden Sie in unseren Datenschutzhinweisen.');
     }
 }
