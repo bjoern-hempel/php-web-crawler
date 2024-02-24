@@ -1,3 +1,5 @@
+> **Attention**: This package is outdated and is no longer maintained. Use [PHP Web Crawler](https://github.com/ixnode/php-web-crawler) instead.
+
 # WebCrawler
 
 This php class allows you to crawl recursively a given webpage (or a given html file) and collect some data from it. Simply define the url (or a html file) and a set of xpath expressions which should map with the output data object. The final representation will be a php array which can be easily converted into the json format for further processing.
